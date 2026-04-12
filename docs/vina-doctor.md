@@ -10,7 +10,11 @@ uv add dashscope
 ```
 
 ## 2. Triển khai Code mẫu (The "Heart" of Scribe)
-
+1. Thiết lập môi trường (Backend - FastAPI)
+Đầu tiên, bạn cần cài đặt thư viện chính thức của DashScope. Nếu bạn dùng Python cho
+ai_engine:
+pip install dashscope
+Triển khai code mẫu:
 Đây là cách bạn gửi một file âm thanh cuộc khám kèm theo Prompt để Qwen2-Audio vừa Transcribe vừa Extract dữ liệu y tế cùng lúc.
 
 ```python
