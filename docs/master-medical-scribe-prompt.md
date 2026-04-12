@@ -1,3 +1,7 @@
+Master System Prompt bằng tiếng Anh
+Đây là bản Master System Prompt được thiết kế tối ưu cho các mô hình LLM mạnh như Qwen-2.5-72B/Max.
+Lý do dùng tiếng Anh: LLM được huấn luyện trên dữ liệu y khoa tiếng Anh chuyên sâu hơn, giúp việc trích xuất thực thể (Entities) và suy luận lâm sàng chính xác hơn, sau đó mới yêu cầu nó dịch ngược lại các ngôn ngữ khác (VN/FR/AR).
+
 # The Master Medical Scribe Prompt
 
 **Role:**
