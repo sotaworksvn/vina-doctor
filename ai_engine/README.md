@@ -1,8 +1,8 @@
 ai_engine/
 ├── prompts/
 │   ├── __init__.py
-│   ├── scribe_prompts.py   <-- Chứa Master Medical Scribe Prompt
-│   └── clinical_prompts.py <-- Chứa Master Clinical Agent Prompt
+│   ├── scribe_prompts.py   <-- Chứa Master Medical Scribe Prompt (Dán vào module Audio)
+│   └── clinical_prompts.py <-- Chứa Master Clinical Agent Prompt (Dán vào module Agents)
 ├── processors/
 │   ├── audio.py            <-- Import scribe_prompts
 │   └── text_cleaner.py
