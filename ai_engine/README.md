@@ -12,3 +12,6 @@ ai_engine/
 │   └── clinical_agent.py   <-- Import clinical_prompts
 ├── __init__.py                
 └── orchestrator.py         <-- Điều phối toàn bộ
+
+main.py
+from ai_engine import VinaDoctorOrchestrator
