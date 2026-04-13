@@ -16,7 +16,7 @@ class VinaDoctorOrchestrator:
         safe_transcript = self.cleaner.anonymize(raw_data['transcript'])
         
         # Bước 3: Phân tích y khoa chuyên sâu (Clinical Prompt)
-        # Tại đây bạn có thể chọn dùng Gemini 1.5 Pro cho độ chính xác cao nhất
+        # Tại đây bạn có thể chọn dùng Qwen cho độ chính xác cao nhất
         final_report = self.agent.analyze(safe_transcript)
         
         return {
