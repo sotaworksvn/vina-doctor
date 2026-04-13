@@ -13,7 +13,7 @@ Module này được ai_engine.py gọi sau khi đã có bản transcript "sạc
 
 from ai_engine.agents import ClinicalAgent
 
-agent = ClinicalAgent(provider="gemini-1.5-pro") # Hoặc qwen-2.5-72b
+agent = ClinicalAgent(provider="qwen-2.5-72b") 
 clinical_data = agent.analyze_transcript(cleaned_text)
 
 3. Các hàm chính (Main Functions)
