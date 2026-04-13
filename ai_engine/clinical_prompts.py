@@ -1,4 +1,5 @@
-The Master Clinical Agent Prompt
+# ai_engine/prompts/clinical_prompts.py
+CLINICAL_MASTER_PROMPT = """
 **Role:**
 You are a Senior Clinical Documentation Specialist and Medical Analyst. Your expertise lies in distilling raw, multi-speaker medical transcripts into high-fidelity, structured clinical notes following the SOAP (Subjective, Objective, Assessment, Plan) standard.
 
@@ -42,3 +43,12 @@ You MUST return ONLY a JSON object. Do not include conversational filler.
     "urgency_level": "Low | Medium | High | Emergency"
   }
 }
+"""
+
+# ai_engine/agents/clinical_agent.py
+from ai_engine.prompts.clinical_prompts import CLINICAL_MASTER_PROMPT
+
+class ClinicalAgent:
+    def process(self, clean_text):
+        # Gọi API (Gemini/Qwen) và truyền CLINICAL_MASTER_PROMPT vào phần 'system'
+        pass
