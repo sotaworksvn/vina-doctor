@@ -4,3 +4,4 @@ export { GlassBar } from "./GlassBar";
 export { Input } from "./Input";
 export { Sidebar } from "./Sidebar";
 export { StatusPill } from "./StatusPill";
+export { Toast } from "./Toast";

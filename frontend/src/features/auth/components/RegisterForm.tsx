@@ -1,12 +1,16 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import { Button, Input } from "@/shared/components";
 import { useAuth } from "../hooks/useAuth";
+import { useToast } from "@/shared/components/ToastContext";
 import type { ApiRequestError } from "@/shared/lib/api-client";
 
 export function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
   const { register } = useAuth();
+  const { showSuccess } = useToast();
+  const router = useRouter();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,6 +23,8 @@ export function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
     setLoading(true);
     try {
       await register({ email, password, full_name: fullName });
+      showSuccess("Account created! Welcome to Vina Doctor.");
+      router.push("/");
     } catch (err) {
       setError((err as ApiRequestError).message ?? "Registration failed");
     } finally {
