@@ -12,7 +12,10 @@ export function AuthPage() {
   const router = useRouter();
 
   useEffect(() => {
-    if (isAuthenticated) router.replace("/");
+    if (isAuthenticated) {
+      const redirect = new URLSearchParams(window.location.search).get("redirect");
+      router.replace(redirect && redirect.startsWith("/") ? redirect : "/");
+    }
   }, [isAuthenticated, router]);
 
   return (

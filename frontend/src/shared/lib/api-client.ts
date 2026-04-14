@@ -1,7 +1,11 @@
 import type { ApiError } from "@/shared/types/api";
 
-const BACKEND_URL =
-  process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8001";
+function getBaseUrl(): string {
+  if (typeof window !== "undefined") {
+    return `${window.location.protocol}//${window.location.host}`;
+  }
+  return process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:8001";
+}
 
 let _token: string | null = null;
 
@@ -40,7 +44,7 @@ async function request<T>(
     headers.set("Content-Type", "application/json");
   }
 
-  const res = await fetch(`${BACKEND_URL}/api/v1${path}`, {
+  const res = await fetch(`${getBaseUrl()}/api/v1${path}`, {
     ...options,
     headers,
   });
