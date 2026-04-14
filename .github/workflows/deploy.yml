@@ -83,11 +83,11 @@ jobs:
           echo "${{ secrets.ECS_SSH_KEY }}" > ~/.ssh/ecs_key
           chmod 600 ~/.ssh/ecs_key
           ssh -i ~/.ssh/ecs_key -o StrictHostKeyChecking=no root@${{ secrets.ECS_HOST }} "mkdir -p /opt/vina-doctor"
-          # Include SERVEO_DOMAIN if provided in secrets — this ensures the deploy host has the value available
+          # Include SERVEO_DOMAIN from action variables — ensures the deploy host has the value available
           printf 'DASHSCOPE_API_KEY=%s\nSECRET_KEY=%s\nSERVEO_DOMAIN=%s\n' \
             '${{ secrets.DASHSCOPE_API_KEY }}' \
             '${{ secrets.SECRET_KEY }}' \
-            '${{ secrets.SERVEO_DOMAIN }}' \
+            '${{ vars.SERVEO_DOMAIN }}' \
             | ssh -i ~/.ssh/ecs_key -o StrictHostKeyChecking=no root@${{ secrets.ECS_HOST }} "cat > /opt/vina-doctor/.env && chmod 600 /opt/vina-doctor/.env"
 
       - name: Deploy via SSH
@@ -98,7 +98,7 @@ jobs:
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_SHA: ${{ github.sha }}
           SERVEO_PRIVATE_KEY: ${{ secrets.SERVEO_PRIVATE_KEY }}
-          SERVEO_DOMAIN: ${{ secrets.SERVEO_DOMAIN }}
+          SERVEO_DOMAIN: ${{ vars.SERVEO_DOMAIN }}
         with:
           host: ${{ secrets.ECS_HOST }}
           username: root
