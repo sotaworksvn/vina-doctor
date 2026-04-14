@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
-import { Button } from "@/shared/components";
-import { Input } from "@/shared/components";
+import { useRouter } from "next/navigation";
+import { Button, Input } from "@/shared/components";
 import { useAuth } from "../hooks/useAuth";
 import type { ApiRequestError } from "@/shared/lib/api-client";
 
 export function LoginForm({ onSwitch }: { onSwitch: () => void }) {
   const { login } = useAuth();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -19,6 +20,7 @@ export function LoginForm({ onSwitch }: { onSwitch: () => void }) {
     setLoading(true);
     try {
       await login({ email, password });
+      router.push("/");
     } catch (err) {
       setError((err as ApiRequestError).message ?? "Login failed");
     } finally {
