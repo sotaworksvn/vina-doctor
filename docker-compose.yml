@@ -14,7 +14,28 @@ services:
       - app-net
     restart: unless-stopped
 
-  # ── 2. Backend ──────────────────────────────────────────────────────────────
+  # ── 2. PostgreSQL ──────────────────────────────────────────────────────────
+  # Relational database for auth, consultations, and reports.
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: vina_doctor
+      POSTGRES_USER: vina
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"         # expose for local psql / Alembic migrations
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vina -d vina_doctor"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - app-net
+    restart: unless-stopped
+
+  # ── 3. Backend ──────────────────────────────────────────────────────────────
   # FastAPI REST API for auth, consultation management, and report retrieval.
   # Calls ai_engine over the internal Docker network.
   backend:
@@ -26,20 +47,23 @@ services:
     env_file:
       - .env
     environment:
-      # Override the AI Engine URL to use the internal service name
+      # Internal service URLs
       AI_ENGINE_URL: http://ai_engine:8000
-      # Store SQLite database and audio uploads in a named volume
-      DATABASE_URL: sqlite+aiosqlite:////data/vina_doctor.db
+      # PostgreSQL connection — uses the compose service name as host
+      DATABASE_URL: postgresql+asyncpg://vina:${POSTGRES_PASSWORD:-changeme}@postgres:5432/vina_doctor
       AUDIO_STORAGE_PATH: /data/audio_uploads
     volumes:
-      - backend_data:/data
+      - audio_data:/data/audio_uploads
     depends_on:
-      - ai_engine
+      ai_engine:
+        condition: service_started
+      postgres:
+        condition: service_healthy
     networks:
       - app-net
     restart: unless-stopped
 
-  # ── 3. Frontend ─────────────────────────────────────────────────────────────
+  # ── 4. Frontend ─────────────────────────────────────────────────────────────
   # Next.js app served from a minimal standalone build image.
   # For client-side API calls the browser uses localhost ports directly.
   frontend:
@@ -66,4 +90,5 @@ networks:
 
 # ── Named volumes ──────────────────────────────────────────────────────────────
 volumes:
-  backend_data:   # SQLite DB + audio file uploads
+  pg_data:        # PostgreSQL data directory
+  audio_data:     # Backend audio file uploads
