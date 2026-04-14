@@ -7,16 +7,18 @@ WORKDIR /app
 # ── Layer 1: install Python dependencies (cached when only pyproject.toml/uv.lock change)
 # Build context is ./backend, so COPY here is relative to ./backend/
 COPY pyproject.toml uv.lock ./backend/
-# --no-install-project: install deps only, skip the local package itself
-RUN cd backend && uv pip install --system --no-install-project .
+# Export pinned deps from uv.lock → requirements.txt, then install (no project source needed)
+RUN cd /app/backend && \
+    uv export --no-hashes --no-dev -o /tmp/requirements.txt && \
+    uv pip install --system -r /tmp/requirements.txt
 
 # ── Layer 2: copy full source (always fresh — busts cache on any source change)
 # package-dir {"" = ".."} in pyproject.toml means setuptools looks in /app/
 # (the parent) and finds the `backend` package at /app/backend/
 COPY . ./backend/
 
-# Install the local backend package (deps already installed above)
-RUN cd backend && uv pip install --system --no-deps .
+# Install the local backend package only (deps already installed above)
+RUN cd /app/backend && uv pip install --system --no-deps .
 
 # Persistent data directory (override DATABASE_URL and AUDIO_STORAGE_PATH via env)
 RUN mkdir -p /data/audio_uploads
