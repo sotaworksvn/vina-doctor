@@ -10,6 +10,9 @@ if [ -n "${SERVEO_PRIVATE_KEY:-}" ] && [ -n "${SERVEO_DOMAIN:-}" ]; then
   printf '%s\n' "$SERVEO_PRIVATE_KEY" > /root/.ssh/serveo_vina
   chmod 600 /root/.ssh/serveo_vina
 
+  # Add serveo.net host key to known_hosts to prevent "Host key verification failed"
+  ssh-keyscan -H serveo.net >> /root/.ssh/known_hosts 2>/dev/null || true
+
   if command -v apt-get >/dev/null 2>&1; then apt-get update && apt-get install -y autossh || true
   elif command -v yum >/dev/null 2>&1; then yum install -y autossh || true
   elif command -v apk >/dev/null 2>&1; then apk add --no-cache autossh || true
