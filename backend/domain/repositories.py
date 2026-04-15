@@ -50,3 +50,6 @@ class ReportRepository(ABC):
 
     @abstractmethod
     async def get_by_consultation(self, consultation_id: UUID) -> Report: ...
+
+    @abstractmethod
+    async def delete_by_consultation(self, consultation_id: UUID) -> None: ...
