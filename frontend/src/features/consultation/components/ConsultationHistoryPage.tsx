@@ -17,7 +17,7 @@ export function ConsultationHistoryPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="font-display text-3xl font-bold text-on-surface">
+        <h1 className="font-display text-2xl font-bold text-on-surface sm:text-3xl">
           Consultation History
         </h1>
         <p className="mt-1 text-sm text-on-surface-variant">
@@ -27,6 +27,7 @@ export function ConsultationHistoryPage() {
 
       {/* Table */}
       <div className="overflow-hidden rounded-3xl bg-surface-lowest shadow-[var(--shadow-ambient)]">
+        <div className="overflow-x-auto">
         <table className="w-full text-left text-sm">
           <thead>
             <tr className="bg-surface-low text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
@@ -78,9 +79,10 @@ export function ConsultationHistoryPage() {
               ))}
           </tbody>
         </table>
+        </div>
 
         {/* Pagination */}
-        <div className="flex items-center justify-between border-t border-outline-variant/15 px-6 py-3">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-t border-outline-variant/15 px-6 py-3">
           <p className="text-xs text-on-surface-variant">
             Showing {page * limit + 1} to{" "}
             {Math.min((page + 1) * limit, total)} of {total}

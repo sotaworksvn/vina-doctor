@@ -7,6 +7,7 @@ export function MedicationTable({
 }) {
   return (
     <div className="overflow-hidden rounded-2xl bg-surface-lowest">
+      <div className="overflow-x-auto">
       <table className="w-full text-left text-sm">
         <thead>
           <tr className="bg-surface-low text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
@@ -38,6 +39,7 @@ export function MedicationTable({
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

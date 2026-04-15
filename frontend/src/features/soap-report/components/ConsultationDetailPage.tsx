@@ -40,7 +40,7 @@ export function ConsultationDetailPage({ id }: { id: string }) {
   return (
     <div className="flex flex-col gap-8">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <Link
             href="/"
@@ -51,7 +51,7 @@ export function ConsultationDetailPage({ id }: { id: string }) {
             </svg>
             Back
           </Link>
-          <h1 className="font-display text-2xl font-bold text-on-surface">
+          <h1 className="font-display text-xl font-bold text-on-surface sm:text-2xl">
             Consultation #{c?.id.slice(0, 8)}
           </h1>
           <p className="mt-1 text-xs text-on-surface-variant">

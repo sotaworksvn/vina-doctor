@@ -36,7 +36,7 @@ export function NewConsultationPage() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-8">
       <div>
-        <h1 className="font-display text-3xl font-bold text-on-surface">
+        <h1 className="font-display text-2xl font-bold text-on-surface sm:text-3xl">
           New Consultation
         </h1>
         <p className="mt-1 text-sm text-on-surface-variant">
@@ -92,7 +92,7 @@ export function NewConsultationPage() {
         <h2 className="mb-3 text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
           AI Model Preference
         </h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {MODELS.map((m) => (
             <button
               key={m.id}

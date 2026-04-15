@@ -20,7 +20,7 @@ export function AuthPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-surface-low px-4">
-      <div className="w-full max-w-md rounded-3xl bg-surface-lowest p-10 shadow-[var(--shadow-ambient)]">
+      <div className="w-full max-w-md rounded-3xl bg-surface-lowest p-6 shadow-[var(--shadow-ambient)] sm:p-10">
         {/* Brand */}
         <div className="mb-8 flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-container">

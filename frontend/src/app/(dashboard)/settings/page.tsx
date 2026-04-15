@@ -6,7 +6,7 @@ export default function SettingsPage() {
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-8">
       <div>
-        <h1 className="font-display text-3xl font-bold text-on-surface">
+        <h1 className="font-display text-2xl font-bold text-on-surface sm:text-3xl">
           Settings
         </h1>
         <p className="mt-1 text-sm text-on-surface-variant">
@@ -60,7 +60,7 @@ export default function SettingsPage() {
         <h2 className="mb-4 font-display text-lg font-semibold text-on-surface">
           AI Model Preference
         </h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <button
             type="button"
             className="flex flex-col gap-2 rounded-2xl bg-surface-lowest p-5 text-left ring-2 ring-primary-container shadow-[var(--shadow-ambient)]"

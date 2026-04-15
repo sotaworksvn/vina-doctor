@@ -4,6 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/features/auth";
 
+interface SidebarProps {
+  isOpen?: boolean;
+  onClose?: () => void;
+}
+
 const NAV_ITEMS = [
   {
     href: "/",
@@ -52,12 +57,29 @@ const NAV_ITEMS = [
   },
 ];
 
-export function Sidebar() {
+export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { logout } = useAuth();
 
+  function handleLinkClick() {
+    onClose?.();
+  }
+
   return (
-    <aside className="flex w-64 shrink-0 flex-col bg-surface-lowest border-r border-outline-variant/15">
+    <>
+      {/* Backdrop overlay on mobile */}
+      {isOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/30 lg:hidden"
+          onClick={onClose}
+          aria-hidden="true"
+        />
+      )}
+      <aside
+        className={`fixed inset-y-0 left-0 z-50 flex w-64 shrink-0 flex-col bg-surface-lowest border-r border-outline-variant/15 transition-transform duration-300 lg:static lg:z-auto lg:translate-x-0 ${
+          isOpen ? "translate-x-0" : "-translate-x-full"
+        }`}
+      >
       {/* Brand */}
       <div className="flex items-center gap-3 px-6 py-6">
         <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-container">
@@ -95,6 +117,7 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={handleLinkClick}
               className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                 active
                   ? "bg-primary-container/15 text-primary-container"
@@ -118,6 +141,7 @@ export function Sidebar() {
         {/* CTA */}
         <Link
           href="/consultations/new"
+          onClick={handleLinkClick}
           className="mt-4 flex items-center justify-center gap-2 rounded-full bg-primary-container px-4 py-2.5 text-sm font-semibold text-on-primary shadow-[var(--shadow-ambient)] transition-colors hover:bg-primary"
         >
           <svg
@@ -146,6 +170,7 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={handleLinkClick}
               className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                 active
                   ? "bg-primary-container/15 text-primary-container"
@@ -187,6 +212,7 @@ export function Sidebar() {
           Log Out
         </button>
       </nav>
-    </aside>
+      </aside>
+    </>
   );
 }
