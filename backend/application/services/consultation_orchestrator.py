@@ -41,13 +41,17 @@ class ConsultationOrchestrator:
             audio_bytes = await self._audio_storage.read(consultation.audio_path)
             filename = consultation.audio_path.split("/")[-1]
 
-            soap = await self._ai_engine.process_consultation(
+            soap, transcript = await self._ai_engine.process_consultation(
                 audio_bytes=audio_bytes,
                 filename=filename,
                 model=model,
             )
 
-            report = DomainReport(consultation_id=consultation_id, soap=soap)
+            report = DomainReport(
+                consultation_id=consultation_id,
+                soap=soap,
+                transcript=transcript,
+            )
             saved_report = await self._report_repo.save(report)
 
             await self._consultation_repo.update_status(

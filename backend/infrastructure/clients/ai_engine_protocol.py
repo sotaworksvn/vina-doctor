@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Protocol
 
-from backend.domain.entities import SOAPReport
+from backend.domain.entities import SOAPReport, TranscriptTurn
 
 
 class AiEngineConfigData:
@@ -21,7 +21,7 @@ class AiEngineClientProtocol(Protocol):
         audio_bytes: bytes,
         filename: str,
         model: str = "qwen3-asr-flash",
-    ) -> SOAPReport: ...
+    ) -> tuple[SOAPReport, list[TranscriptTurn]]: ...
 
     async def update_dashscope_key(self, api_key: str) -> None:
         """Push a new DashScope API key to ai_engine at runtime."""

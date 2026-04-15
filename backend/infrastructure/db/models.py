@@ -64,6 +64,10 @@ class ReportModel(Base):
     )
     # Stored as JSON blob; no need for separate tables at MVP stage
     soap_json: Mapped[str] = mapped_column(Text, nullable=False)
+    # Nullable: NULL means no transcript (legacy rows or empty ASR result)
+    transcript_json: Mapped[str | None] = mapped_column(
+        Text, nullable=True, default=None
+    )
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
 
     consultation: Mapped[ConsultationModel] = relationship(
