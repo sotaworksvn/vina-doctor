@@ -10,6 +10,7 @@ from backend.api.v1.schemas.report import (
     MultilingualTextSchema,
     ReportResponse,
     SOAPReportSchema,
+    TranscriptTurnSchema,
 )
 from backend.application.use_cases.get_report_use_case import GetReportUseCase
 from backend.domain.entities import Report
@@ -32,6 +33,7 @@ def _to_response(report: Report) -> ReportResponse:
             medications=[MedicationSchema(**m.model_dump()) for m in soap.medications],
             severity=soap.severity,
         ),
+        transcript=[TranscriptTurnSchema(**t.model_dump()) for t in report.transcript],
         created_at=report.created_at,
     )
 

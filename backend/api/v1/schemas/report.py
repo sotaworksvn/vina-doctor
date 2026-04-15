@@ -30,8 +30,15 @@ class SOAPReportSchema(BaseModel):
     severity: str
 
 
+class TranscriptTurnSchema(BaseModel):
+    speaker: str
+    timestamp: str | None = None
+    text: str
+
+
 class ReportResponse(BaseModel):
     id: UUID
     consultation_id: UUID
     soap: SOAPReportSchema
+    transcript: list[TranscriptTurnSchema] = []
     created_at: datetime

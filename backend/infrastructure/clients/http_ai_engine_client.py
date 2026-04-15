@@ -2,7 +2,12 @@ from __future__ import annotations
 
 import httpx
 
-from backend.domain.entities import Medication, MultilingualText, SOAPReport
+from backend.domain.entities import (
+    Medication,
+    MultilingualText,
+    SOAPReport,
+    TranscriptTurn,
+)
 from backend.infrastructure.clients.ai_engine_protocol import AiEngineConfigData
 
 
@@ -18,7 +23,7 @@ class HttpAiEngineClient:
         audio_bytes: bytes,
         filename: str,
         model: str = "qwen3-asr-flash",
-    ) -> SOAPReport:
+    ) -> tuple[SOAPReport, list[TranscriptTurn]]:
         url = f"{self._base_url}/v1/consultations/process"
         async with httpx.AsyncClient(timeout=self._timeout) as client:
             response = await client.post(
@@ -29,7 +34,9 @@ class HttpAiEngineClient:
             response.raise_for_status()
             data = response.json()
 
-        return _map_response_to_soap(data)
+        soap = _map_response_to_soap(data)
+        transcript = _map_response_to_transcript(data)
+        return soap, transcript
 
     async def update_dashscope_key(self, api_key: str) -> None:
         """Forward a new DashScope API key to ai_engine via PATCH /v1/config/dashscope-api-key."""
@@ -101,3 +108,29 @@ def _map_response_to_soap(data: dict) -> SOAPReport:
         medications=medications,
         severity=str(report.get("severity_flag", "")),
     )
+
+
+def _map_response_to_transcript(data: dict) -> list[TranscriptTurn]:
+    """Extract transcript turns from the AI engine response.
+
+    The AI engine returns a list of {speaker, timestamp, text} objects.
+    Returns an empty list if the key is absent or the value is not a list.
+    """
+    raw_turns = data.get("transcript") or []
+    if not isinstance(raw_turns, list):
+        return []
+    turns: list[TranscriptTurn] = []
+    for turn in raw_turns:
+        if not isinstance(turn, dict):
+            continue
+        text = turn.get("text", "").strip()
+        if not text:
+            continue
+        turns.append(
+            TranscriptTurn(
+                speaker=str(turn.get("speaker", "Unknown")),
+                timestamp=turn.get("timestamp") or None,
+                text=text,
+            )
+        )
+    return turns

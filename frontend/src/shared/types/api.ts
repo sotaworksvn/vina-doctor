@@ -35,6 +35,12 @@ export interface Medication {
   duration: string;
 }
 
+export interface TranscriptTurn {
+  speaker: string;
+  timestamp: string | null;
+  text: string;
+}
+
 export interface SOAPReport {
   subjective: MultilingualText;
   objective: MultilingualText;
@@ -49,6 +55,7 @@ export interface ReportResponse {
   id: string;
   consultation_id: string;
   soap: SOAPReport;
+  transcript: TranscriptTurn[];
   created_at: string;
 }
 

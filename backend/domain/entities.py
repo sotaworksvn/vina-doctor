@@ -8,6 +8,16 @@ from pydantic import BaseModel, Field
 from backend.domain.value_objects import ConsultationStatus
 
 
+class TranscriptTurn(BaseModel):
+    """A single speaker turn in the consultation transcript."""
+
+    speaker: str
+    timestamp: str | None = None
+    text: str
+
+    model_config = {"frozen": True}
+
+
 class User(BaseModel):
     id: UUID = Field(default_factory=uuid4)
     email: str
@@ -65,6 +75,7 @@ class Report(BaseModel):
     id: UUID = Field(default_factory=uuid4)
     consultation_id: UUID
     soap: SOAPReport
+    transcript: list[TranscriptTurn] = Field(default_factory=list)
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
     model_config = {"frozen": True}

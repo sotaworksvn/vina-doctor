@@ -5,6 +5,7 @@ import { Button, Card, StatusPill } from "@/shared/components";
 import { useConsultation } from "@/features/consultation/hooks/useConsultation";
 import { useSOAPReport } from "../hooks/useSOAPReport";
 import { SOAPReportView } from "./SOAPReportView";
+import { TranscriptView } from "./TranscriptView";
 import { retryConsultation } from "@/features/consultation/api/consultation-api";
 
 export function ConsultationDetailPage({ id }: { id: string }) {
@@ -124,6 +125,12 @@ export function ConsultationDetailPage({ id }: { id: string }) {
           )}
 
           {r?.soap && <SOAPReportView report={r.soap} />}
+
+          {r?.transcript && r.transcript.length > 0 && (
+            <Card>
+              <TranscriptView turns={r.transcript} />
+            </Card>
+          )}
         </>
       )}
     </div>
