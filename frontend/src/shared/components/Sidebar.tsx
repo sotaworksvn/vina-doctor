@@ -61,7 +61,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const pathname = usePathname();
   const { logout } = useAuth();
 
-  function handleLinkClick() {
+  function closeSidebarAfterNavigation() {
     onClose?.();
   }
 
@@ -117,7 +117,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
             <Link
               key={item.href}
               href={item.href}
-              onClick={handleLinkClick}
+              onClick={closeSidebarAfterNavigation}
               className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                 active
                   ? "bg-primary-container/15 text-primary-container"
@@ -141,7 +141,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         {/* CTA */}
         <Link
           href="/consultations/new"
-          onClick={handleLinkClick}
+          onClick={closeSidebarAfterNavigation}
           className="mt-4 flex items-center justify-center gap-2 rounded-full bg-primary-container px-4 py-2.5 text-sm font-semibold text-on-primary shadow-[var(--shadow-ambient)] transition-colors hover:bg-primary"
         >
           <svg
@@ -170,7 +170,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
             <Link
               key={item.href}
               href={item.href}
-              onClick={handleLinkClick}
+              onClick={closeSidebarAfterNavigation}
               className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-colors ${
                 active
                   ? "bg-primary-container/15 text-primary-container"
