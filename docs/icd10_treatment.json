@@ -1,0 +1,515 @@
+{
+  "_meta": {
+    "version": "1.0",
+    "description": "ICD-10 treatment reference used by the ICD-10 Selector Agent to enrich clinical context before SOAP report generation. Each entry can be extended by specialty or per-clinic customisation — see the 'specialty' field.",
+    "usage": "Add entries freely. The selector agent reads code, name, specialty, symptoms_keywords, drugs, protocol, contraindications, and notes.",
+    "extend_instructions": "To add specialty-specific entries, set 'specialty' to the relevant specialty name (e.g. 'cardiology', 'endocrinology'). The repository supports filtering by specialty."
+  },
+  "conditions": [
+    {
+      "code": "E11.9",
+      "name": "Type 2 diabetes mellitus without complications",
+      "specialty": "endocrinology",
+      "symptoms_keywords": ["diabetes", "diabetic", "blood sugar", "hyperglycemia", "polydipsia", "polyuria", "đường huyết", "tiểu đường", "khát nước", "đi tiểu nhiều"],
+      "drugs": [
+        "Metformin 500–1000 mg BD (first-line)",
+        "Glibenclamide 5 mg OD (sulfonylurea add-on)",
+        "Sitagliptin 100 mg OD (DPP-4 inhibitor)",
+        "Empagliflozin 10 mg OD (SGLT-2 inhibitor)"
+      ],
+      "protocol": "Lifestyle modification (diet + exercise) for 3 months first. Start Metformin if HbA1c > 6.5% or fasting glucose > 7.0 mmol/L. Add second agent if target not reached after 3 months.",
+      "contraindications": "Hold Metformin if eGFR < 30 mL/min. Avoid sulfonylureas in severe renal impairment.",
+      "notes": "Monitor HbA1c every 3 months until stable, then every 6 months. Check renal function annually."
+    },
+    {
+      "code": "E11.65",
+      "name": "Type 2 diabetes mellitus with hyperglycemia",
+      "specialty": "endocrinology",
+      "symptoms_keywords": ["hyperglycemia", "high blood sugar", "glucose elevated", "đường huyết cao", "tiểu đường tăng đường"],
+      "drugs": [
+        "Insulin (short-acting) if glucose > 16 mmol/L",
+        "Metformin 500–1000 mg BD",
+        "Glibenclamide 5 mg OD"
+      ],
+      "protocol": "Immediate glucose control. Consider insulin if HbA1c > 9% or symptomatic hyperglycaemia. Adjust oral agents after stabilisation.",
+      "contraindications": "Avoid SGLT-2 inhibitors during acute illness.",
+      "notes": "Check ketones. Educate patient on sick-day rules."
+    },
+    {
+      "code": "I10",
+      "name": "Essential (primary) hypertension",
+      "specialty": "cardiology",
+      "symptoms_keywords": ["hypertension", "high blood pressure", "blood pressure elevated", "bp high", "tăng huyết áp", "huyết áp cao", "đau đầu", "headache dizzy"],
+      "drugs": [
+        "Amlodipine 5–10 mg OD (CCB, first-line)",
+        "Enalapril 5–20 mg OD (ACEi)",
+        "Losartan 50–100 mg OD (ARB)",
+        "Hydrochlorothiazide 12.5–25 mg OD (thiazide)"
+      ],
+      "protocol": "Target BP < 130/80 mmHg. Start with CCB or ACEi/ARB monotherapy. Combine if target not reached in 4 weeks. Add low-dose thiazide as third agent.",
+      "contraindications": "ACEi/ARB contraindicated in pregnancy and bilateral renal artery stenosis. Avoid beta-blockers as first-line unless co-existing angina or heart failure.",
+      "notes": "Check renal function and electrolytes 1–2 weeks after starting ACEi/ARB. Lifestyle: reduce salt, alcohol, weight."
+    },
+    {
+      "code": "I25.10",
+      "name": "Atherosclerotic heart disease of native coronary artery without angina pectoris",
+      "specialty": "cardiology",
+      "symptoms_keywords": ["coronary artery disease", "CAD", "atherosclerosis", "chest pain", "angina", "bệnh mạch vành", "đau ngực", "xơ vữa động mạch"],
+      "drugs": [
+        "Aspirin 75–100 mg OD (antiplatelet)",
+        "Atorvastatin 40–80 mg OD (high-intensity statin)",
+        "Bisoprolol 2.5–10 mg OD (beta-blocker)",
+        "Enalapril 5–20 mg OD (ACEi)"
+      ],
+      "protocol": "All patients: antiplatelet + high-intensity statin. Add beta-blocker if EF < 40%. ACEi if EF < 40% or hypertension. Lifestyle modification mandatory.",
+      "contraindications": "Aspirin contraindicated if active peptic ulcer. Statin: monitor liver enzymes.",
+      "notes": "LDL target < 1.8 mmol/L. Annual cardiology review. Refer for stress test or angiography if symptomatic."
+    },
+    {
+      "code": "J06.9",
+      "name": "Acute upper respiratory infection, unspecified",
+      "specialty": "general",
+      "symptoms_keywords": ["upper respiratory", "common cold", "runny nose", "sore throat", "cough", "sneezing", "sổ mũi", "đau họng", "ho", "cảm lạnh", "viêm hô hấp trên"],
+      "drugs": [
+        "Paracetamol 500–1000 mg Q6H PRN (antipyretic/analgesic)",
+        "Cetirizine 10 mg OD (antihistamine for rhinorrhoea)",
+        "Saline nasal spray PRN",
+        "Dextromethorphan 15 mg Q6H PRN (cough suppressant)"
+      ],
+      "protocol": "Supportive treatment. No antibiotics unless bacterial superinfection suspected. Adequate hydration and rest.",
+      "contraindications": "Avoid aspirin in children (Reye's syndrome risk). Do not use cough suppressants in children under 6.",
+      "notes": "Educate patient: viral illness, usually self-limiting 7–10 days. Return if fever > 38.5°C persists > 3 days."
+    },
+    {
+      "code": "J18.9",
+      "name": "Pneumonia, unspecified organism",
+      "specialty": "pulmonology",
+      "symptoms_keywords": ["pneumonia", "lung infection", "productive cough", "fever chills", "dyspnea", "viêm phổi", "sốt cao", "khó thở", "đàm vàng xanh"],
+      "drugs": [
+        "Amoxicillin-clavulanate 875/125 mg BD (community-acquired, mild)",
+        "Azithromycin 500 mg OD x5 days (atypical coverage)",
+        "Ceftriaxone 1–2 g IV OD (moderate-severe, hospitalised)"
+      ],
+      "protocol": "Assess severity with CURB-65. Score 0–1: oral outpatient. Score 2+: consider hospitalisation. Cover atypicals if CURB-65 ≥ 2 or young adult.",
+      "contraindications": "Penicillin allergy: use azithromycin or levofloxacin.",
+      "notes": "Obtain sputum culture before antibiotics if possible. Reassess at 48–72 hours. Pneumococcal vaccine counselling."
+    },
+    {
+      "code": "J45.9",
+      "name": "Asthma, unspecified",
+      "specialty": "pulmonology",
+      "symptoms_keywords": ["asthma", "wheeze", "wheezing", "shortness of breath", "bronchospasm", "hen suyễn", "khò khè", "khó thở", "co thắt phế quản"],
+      "drugs": [
+        "Salbutamol 100 mcg inhaler 2 puffs Q4–6H PRN (SABA, reliever)",
+        "Budesonide 200 mcg inhaler BD (ICS, controller)",
+        "Formoterol 12 mcg inhaler BD (LABA, add-on)",
+        "Prednisolone 40 mg OD x5 days (acute exacerbation)"
+      ],
+      "protocol": "Step 1 (mild intermittent): SABA PRN only. Step 2 (mild persistent): add low-dose ICS. Step 3: ICS + LABA. Acute severe: SABA + systemic steroid.",
+      "contraindications": "Avoid non-selective beta-blockers. NSAIDs in aspirin-sensitive asthma.",
+      "notes": "Assess inhaler technique at every visit. Peak flow monitoring. Annual spirometry."
+    },
+    {
+      "code": "J44.1",
+      "name": "Chronic obstructive pulmonary disease with acute exacerbation",
+      "specialty": "pulmonology",
+      "symptoms_keywords": ["COPD", "chronic obstructive", "emphysema", "chronic bronchitis", "exacerbation", "bệnh phổi tắc nghẽn mạn tính", "viêm phế quản mạn", "khó thở nặng hơn"],
+      "drugs": [
+        "Salbutamol 2.5 mg nebuliser Q20 min x3 (acute)",
+        "Ipratropium 0.5 mg nebuliser Q4H (anticholinergic)",
+        "Prednisolone 40 mg OD x5 days",
+        "Amoxicillin-clavulanate 875/125 mg BD x5 days (if purulent sputum)",
+        "Tiotropium 18 mcg inhaler OD (long-term maintenance)"
+      ],
+      "protocol": "Acute: controlled O2 (SpO2 88–92%), bronchodilators, systemic steroids, antibiotics if purulent sputum. Long-term: LAMA ± LABA ± ICS depending on GOLD stage.",
+      "contraindications": "High-flow O2 may suppress respiratory drive in chronic hypercapnia.",
+      "notes": "Smoking cessation is the single most important intervention. Pulmonary rehab referral. Influenza and pneumococcal vaccination."
+    },
+    {
+      "code": "K21.0",
+      "name": "Gastro-oesophageal reflux disease with oesophagitis",
+      "specialty": "gastroenterology",
+      "symptoms_keywords": ["GERD", "reflux", "heartburn", "acid reflux", "regurgitation", "trào ngược dạ dày", "ợ chua", "nóng rát ngực", "ợ nóng"],
+      "drugs": [
+        "Omeprazole 20–40 mg OD before breakfast (PPI, 4–8 weeks)",
+        "Pantoprazole 40 mg OD (alternative PPI)",
+        "Domperidone 10 mg TDS before meals (prokinetic)",
+        "Gaviscon 10 mL TDS after meals PRN (antacid/alginate)"
+      ],
+      "protocol": "Lifestyle first: elevate head of bed, avoid triggers (spicy food, coffee, alcohol, late meals). PPI 4–8 weeks for erosive oesophagitis. Maintenance PPI if relapse.",
+      "contraindications": "Long-term PPI: risk of hypomagnesaemia, C. diff, bone density reduction. Review need annually.",
+      "notes": "Alarm features (dysphagia, weight loss, haematemesis): urgent endoscopy. H. pylori test if dyspepsia."
+    },
+    {
+      "code": "K25.9",
+      "name": "Gastric ulcer, unspecified",
+      "specialty": "gastroenterology",
+      "symptoms_keywords": ["gastric ulcer", "peptic ulcer", "stomach ulcer", "epigastric pain", "loét dạ dày", "đau vùng thượng vị", "loét dạ dày tá tràng"],
+      "drugs": [
+        "Omeprazole 40 mg BD (PPI, high dose x4–8 weeks)",
+        "Amoxicillin 1 g BD + Clarithromycin 500 mg BD x7 days (H. pylori eradication — triple therapy)",
+        "Bismuth subcitrate 120 mg QDS (quadruple therapy add-on)",
+        "Sucralfate 1 g QDS (mucosal protectant)"
+      ],
+      "protocol": "Test for H. pylori (urea breath test or stool antigen). If positive: triple or quadruple eradication therapy. PPI 4–8 weeks. Stop NSAIDs if possible.",
+      "contraindications": "Clarithromycin resistance in some regions — check local antibiogram.",
+      "notes": "Confirm ulcer healing by endoscopy at 6–8 weeks for gastric ulcer (cancer risk). Avoid NSAIDs, steroids, alcohol."
+    },
+    {
+      "code": "N39.0",
+      "name": "Urinary tract infection, site not specified",
+      "specialty": "urology",
+      "symptoms_keywords": ["UTI", "urinary tract infection", "dysuria", "frequency", "burning urination", "nhiễm trùng đường tiểu", "tiểu buốt", "tiểu rắt", "tiểu nhiều lần"],
+      "drugs": [
+        "Trimethoprim-sulfamethoxazole 960 mg BD x3 days (uncomplicated female)",
+        "Nitrofurantoin 100 mg BD x5–7 days (uncomplicated female)",
+        "Ciprofloxacin 500 mg BD x3 days (uncomplicated, fluoroquinolone)",
+        "Ceftriaxone 1 g IV OD (complicated/pyelonephritis)"
+      ],
+      "protocol": "Uncomplicated female: oral antibiotics x3 days. Complicated or male: x7–14 days. Pyelonephritis: x10–14 days, consider IV if vomiting.",
+      "contraindications": "Nitrofurantoin: avoid if eGFR < 30. Fluoroquinolones: avoid in pregnancy.",
+      "notes": "Urine M/C/S before antibiotics if complicated. Increase fluid intake. Recurrent UTI (≥3/year): consider prophylaxis."
+    },
+    {
+      "code": "M54.5",
+      "name": "Low back pain",
+      "specialty": "orthopaedics",
+      "symptoms_keywords": ["low back pain", "lumbar pain", "back ache", "sciatica", "đau lưng", "đau thắt lưng", "đau cột sống thắt lưng", "thoát vị đĩa đệm"],
+      "drugs": [
+        "Paracetamol 500–1000 mg Q6H (first-line analgesic)",
+        "Ibuprofen 400 mg TDS with food (NSAID, short course ≤7 days)",
+        "Diclofenac 50 mg TDS (NSAID alternative)",
+        "Eperisone 50 mg TDS (muscle relaxant)",
+        "Pregabalin 75 mg BD (neuropathic/radiculopathy component)"
+      ],
+      "protocol": "Non-specific LBP: stay active, avoid bed rest > 2 days. First-line: paracetamol ± NSAID short course. Physiotherapy referral if > 4 weeks. Red flags: urgent imaging.",
+      "contraindications": "NSAIDs: avoid in peptic ulcer, renal impairment, cardiovascular disease. Opioids: avoid as first-line.",
+      "notes": "Red flags: fever, weight loss, history of cancer, saddle anaesthesia, bladder/bowel dysfunction — urgent MRI."
+    },
+    {
+      "code": "M05.9",
+      "name": "Rheumatoid arthritis, unspecified",
+      "specialty": "rheumatology",
+      "symptoms_keywords": ["rheumatoid arthritis", "RA", "joint swelling", "morning stiffness", "synovitis", "viêm khớp dạng thấp", "đau khớp", "sưng khớp", "cứng khớp buổi sáng"],
+      "drugs": [
+        "Methotrexate 7.5–25 mg weekly (DMARD, first-line)",
+        "Hydroxychloroquine 200–400 mg OD (DMARD combination)",
+        "Prednisolone 5–10 mg OD (bridging steroid)",
+        "Ibuprofen 400 mg TDS (NSAID for symptom relief)",
+        "Folic acid 5 mg weekly (to reduce Methotrexate side-effects)"
+      ],
+      "protocol": "Treat-to-target: aim for DAS28 remission. Start Methotrexate early. Add hydroxychloroquine or sulfasalazine for combination DMARD. Biologic (anti-TNF) if inadequate response to 2 DMARDs.",
+      "contraindications": "Methotrexate: avoid in pregnancy, significant renal/hepatic impairment, or active infection.",
+      "notes": "Monitor FBC, LFT, renal function every 3 months. Annual CXR if on Methotrexate. Vaccinations before biologic initiation."
+    },
+    {
+      "code": "F32.9",
+      "name": "Major depressive episode, unspecified",
+      "specialty": "psychiatry",
+      "symptoms_keywords": ["depression", "depressed mood", "anhedonia", "low mood", "insomnia", "fatigue", "trầm cảm", "buồn chán", "mất hứng thú", "mất ngủ", "mệt mỏi kéo dài"],
+      "drugs": [
+        "Sertraline 50–200 mg OD (SSRI, first-line)",
+        "Escitalopram 10–20 mg OD (SSRI, well-tolerated)",
+        "Fluoxetine 20–60 mg OD (SSRI)",
+        "Mirtazapine 15–45 mg nocte (for insomnia/anorexia co-morbidity)"
+      ],
+      "protocol": "Start SSRI at low dose, titrate after 2 weeks. Full therapeutic effect at 4–6 weeks. Continue ≥6 months after remission for first episode. Psychotherapy (CBT) alongside medication.",
+      "contraindications": "Do not combine SSRIs with MAOIs (serotonin syndrome). QTc prolongation risk with citalopram at high doses.",
+      "notes": "Assess suicide risk at every visit. Monitor for activation symptoms in first 2 weeks. Refer to psychiatrist if severe, psychotic features, or treatment-resistant."
+    },
+    {
+      "code": "F41.1",
+      "name": "Generalised anxiety disorder",
+      "specialty": "psychiatry",
+      "symptoms_keywords": ["anxiety", "generalised anxiety", "worry", "panic", "restlessness", "lo âu", "rối loạn lo âu", "hồi hộp", "lo lắng kéo dài"],
+      "drugs": [
+        "Sertraline 50–200 mg OD (SSRI, first-line)",
+        "Escitalopram 10–20 mg OD (SSRI)",
+        "Venlafaxine 75–225 mg OD (SNRI)",
+        "Buspirone 10 mg TDS (non-benzodiazepine anxiolytic)",
+        "Diazepam 2–5 mg BD (short-term only, ≤4 weeks)"
+      ],
+      "protocol": "CBT is first-line. Pharmacotherapy: SSRI/SNRI as first-line, onset 4–6 weeks. Short-term benzodiazepine for severe acute distress only. Avoid long-term benzodiazepine.",
+      "contraindications": "Benzodiazepines: dependence risk, avoid in history of substance abuse.",
+      "notes": "Screen for co-existing depression. Lifestyle: exercise, sleep hygiene, caffeine reduction."
+    },
+    {
+      "code": "E03.9",
+      "name": "Hypothyroidism, unspecified",
+      "specialty": "endocrinology",
+      "symptoms_keywords": ["hypothyroidism", "underactive thyroid", "weight gain", "fatigue", "cold intolerance", "constipation", "suy giáp", "mệt mỏi", "tăng cân", "táo bón", "không chịu lạnh"],
+      "drugs": [
+        "Levothyroxine 25–200 mcg OD (T4 replacement, fasting, 30 min before food)"
+      ],
+      "protocol": "Start low dose (25–50 mcg in elderly/cardiac). Titrate every 4–6 weeks based on TSH. Target TSH 0.5–2.5 mIU/L for most patients.",
+      "contraindications": "Caution in ischaemic heart disease — start very low dose. Excess levothyroxine risks atrial fibrillation and osteoporosis.",
+      "notes": "Take on empty stomach. Check TSH every 6 weeks until stable, then annually. Many drug interactions (calcium, iron, PPI reduce absorption)."
+    },
+    {
+      "code": "E05.9",
+      "name": "Thyrotoxicosis, unspecified",
+      "specialty": "endocrinology",
+      "symptoms_keywords": ["hyperthyroidism", "thyrotoxicosis", "overactive thyroid", "palpitations", "weight loss", "heat intolerance", "cường giáp", "hồi hộp", "sụt cân", "không chịu nóng", "run tay"],
+      "drugs": [
+        "Carbimazole 20–40 mg OD (thionamide, block synthesis)",
+        "Propylthiouracil 100–200 mg TDS (alternative, preferred in pregnancy 1st trimester)",
+        "Propranolol 40 mg TDS (symptom control — palpitations, tremor)"
+      ],
+      "protocol": "Start antithyroid drug. Add beta-blocker for symptomatic control. Reassess thyroid function every 4–6 weeks. Consider radioiodine or surgery after 12–18 months.",
+      "contraindications": "PTU: hepatotoxicity risk — monitor LFT. Radioiodine: contraindicated in pregnancy.",
+      "notes": "Monitor FBC (agranulocytosis risk with carbimazole — advise patient to report sore throat/fever immediately). Graves' disease: ophthalmic review."
+    },
+    {
+      "code": "N18.3",
+      "name": "Chronic kidney disease, stage 3",
+      "specialty": "nephrology",
+      "symptoms_keywords": ["chronic kidney disease", "CKD", "renal failure", "reduced GFR", "bệnh thận mạn", "suy thận mạn", "giảm chức năng thận", "creatinine tăng"],
+      "drugs": [
+        "Enalapril 5–20 mg OD (ACEi — reduces proteinuria, slows progression)",
+        "Amlodipine 5–10 mg OD (BP control if ACEi insufficient)",
+        "Sodium bicarbonate 500–1000 mg BD (correct metabolic acidosis if HCO3 < 22)",
+        "Erythropoietin SC (if Hb < 100 g/L and iron replete)",
+        "Ferrous sulphate 200 mg BD (if iron deficient)"
+      ],
+      "protocol": "BP target < 130/80 mmHg. ACEi/ARB to reduce proteinuria. Correct anaemia, acidosis, hyperphosphataemia. Avoid nephrotoxins (NSAIDs, contrast, aminoglycosides). Referral to nephrology if eGFR < 30.",
+      "contraindications": "NSAIDs: strictly avoid. Metformin: hold if eGFR < 30. Gadolinium contrast: caution if eGFR < 30.",
+      "notes": "Monitor eGFR, electrolytes, bicarbonate every 3–6 months. Dietary advice: limit protein, phosphate, potassium if advanced CKD."
+    },
+    {
+      "code": "I50.9",
+      "name": "Heart failure, unspecified",
+      "specialty": "cardiology",
+      "symptoms_keywords": ["heart failure", "cardiac failure", "dyspnea on exertion", "orthopnoea", "oedema", "suy tim", "khó thở khi gắng sức", "phù chân", "tím tái"],
+      "drugs": [
+        "Furosemide 20–80 mg OD (loop diuretic — decongestion)",
+        "Enalapril 2.5–20 mg BD (ACEi — mortality benefit HFrEF)",
+        "Bisoprolol 1.25–10 mg OD (beta-blocker — after decongestion)",
+        "Spironolactone 25–50 mg OD (MRA — add if EF ≤ 35%)",
+        "Sacubitril/Valsartan 24/26–97/103 mg BD (ARNI — if ACEi tolerated)"
+      ],
+      "protocol": "HFrEF (EF < 40%): ACEi + beta-blocker + MRA (the three pillars). Decongestion with diuretic. ARNI can replace ACEi. HFpEF: treat underlying cause and symptoms.",
+      "contraindications": "ACEi + ARB combination: avoid. Beta-blocker: do not start in acute decompensation.",
+      "notes": "Daily weight monitoring. Fluid restriction 1.5 L/day if severe. Cardiac rehab referral. SGLT-2 inhibitors (dapagliflozin) now first-line for HFrEF."
+    },
+    {
+      "code": "I48.91",
+      "name": "Unspecified atrial fibrillation",
+      "specialty": "cardiology",
+      "symptoms_keywords": ["atrial fibrillation", "AF", "palpitations", "irregular pulse", "rung nhĩ", "loạn nhịp tim", "hồi hộp", "mạch không đều"],
+      "drugs": [
+        "Apixaban 5 mg BD (NOAC — stroke prevention, preferred)",
+        "Warfarin 2–10 mg OD (VKA — if NOAC unavailable, target INR 2–3)",
+        "Bisoprolol 2.5–10 mg OD (rate control)",
+        "Digoxin 62.5–250 mcg OD (rate control, adjunct)"
+      ],
+      "protocol": "CHA₂DS₂-VASc score: anticoagulate if ≥ 1 (male) or ≥ 2 (female). Rate control target HR < 110 bpm at rest. Rhythm control: cardioversion ± antiarrhythmic if symptomatic.",
+      "contraindications": "Warfarin: many drug interactions, monitor INR closely. NOACs: reduce dose if renal impairment.",
+      "notes": "HAS-BLED score to assess bleeding risk. Do not withhold anticoagulation due to fall risk alone. Thyroid function, echo recommended at diagnosis."
+    },
+    {
+      "code": "G43.9",
+      "name": "Migraine, unspecified",
+      "specialty": "neurology",
+      "symptoms_keywords": ["migraine", "headache", "aura", "unilateral headache", "nausea vomiting headache", "đau nửa đầu", "migrain", "đau đầu kèm nôn"],
+      "drugs": [
+        "Ibuprofen 400–600 mg at onset (NSAID, mild-moderate)",
+        "Sumatriptan 50–100 mg at onset (triptan, moderate-severe)",
+        "Metoclopramide 10 mg IV/IM (antiemetic adjunct)",
+        "Topiramate 25–100 mg OD (prophylaxis if ≥ 4 attacks/month)",
+        "Amitriptyline 10–75 mg nocte (prophylaxis alternative)"
+      ],
+      "protocol": "Acute: take medication early in attack. Mild-moderate: NSAID ± antiemetic. Severe: triptan. Prophylaxis if ≥ 4 attacks/month or disabling attacks.",
+      "contraindications": "Triptans: contraindicated in ischaemic heart disease, uncontrolled hypertension, basilar migraine. Avoid opioids for migraine.",
+      "notes": "Headache diary. Identify and avoid triggers. Limit analgesic use to ≤ 10 days/month (medication overuse headache)."
+    },
+    {
+      "code": "G40.9",
+      "name": "Epilepsy, unspecified",
+      "specialty": "neurology",
+      "symptoms_keywords": ["epilepsy", "seizure", "convulsion", "fit", "động kinh", "co giật", "cơn co giật"],
+      "drugs": [
+        "Valproate 400–2000 mg/day divided BD (broad-spectrum, generalised epilepsy)",
+        "Carbamazepine 200–1200 mg/day divided BD (focal epilepsy)",
+        "Lamotrigine 50–400 mg/day (focal/generalised, preferred in women)",
+        "Levetiracetam 500–3000 mg/day divided BD (adjunct or monotherapy)"
+      ],
+      "protocol": "Start monotherapy, titrate slowly. Switch if inadequate seizure control. Two AEDs have failed: refer to epilepsy specialist. Driving restrictions apply.",
+      "contraindications": "Valproate: avoid in women of childbearing age (teratogenicity — neural tube defects). Carbamazepine: SJS risk in HLA-B*1502 (Asian populations — screen before use).",
+      "notes": "Never stop AED abruptly. Monitor levels for phenytoin, carbamazepine, valproate. Women: folic acid 5 mg OD if considering pregnancy."
+    },
+    {
+      "code": "L20.9",
+      "name": "Atopic dermatitis, unspecified",
+      "specialty": "dermatology",
+      "symptoms_keywords": ["eczema", "atopic dermatitis", "itchy skin", "dry skin", "rash", "chàm", "viêm da cơ địa", "ngứa da", "da khô", "phát ban"],
+      "drugs": [
+        "Hydrocortisone 1% cream BD (mild TCS, face/flexures)",
+        "Betamethasone 0.1% cream BD (moderate TCS, body, short course)",
+        "Cetirizine 10 mg OD (antihistamine — sedating: chlorphenamine 4 mg nocte if severe itch)",
+        "Tacrolimus 0.03–0.1% ointment BD (topical calcineurin inhibitor, steroid-sparing)",
+        "Emollient (e.g. white soft paraffin) applied TDS–QDS"
+      ],
+      "protocol": "Emollient as base treatment (every day, every patient). Topical corticosteroid for flares. Tacrolimus for face, flexures, and steroid-sparing. Antihistamine for itch/sleep. Identify and avoid triggers.",
+      "contraindications": "Potent TCS: avoid on face, avoid in children for prolonged periods (skin atrophy).",
+      "notes": "Step-up if uncontrolled: dupilumab (biologic) for moderate-severe adult AD. Skin infection screening (S. aureus)."
+    },
+    {
+      "code": "B34.9",
+      "name": "Viral infection, unspecified",
+      "specialty": "general",
+      "symptoms_keywords": ["viral infection", "virus", "fever", "myalgia", "fatigue", "nhiễm virus", "sốt virus", "mệt mỏi", "đau mình"],
+      "drugs": [
+        "Paracetamol 500–1000 mg Q6H PRN (antipyretic)",
+        "Ibuprofen 400 mg Q8H PRN (if paracetamol insufficient, not dengue)",
+        "Oral rehydration salts (ORS) for dehydration"
+      ],
+      "protocol": "Supportive care: rest, hydration, antipyretics. No antibiotics unless bacterial co-infection confirmed. Monitor for deterioration.",
+      "contraindications": "Avoid ibuprofen/NSAIDs in suspected dengue (bleeding risk). Aspirin in children.",
+      "notes": "Consider dengue, influenza, COVID-19 in febrile patient. Report notifiable diseases. Safety-net: return if rash, bleeding, severe headache, neck stiffness."
+    },
+    {
+      "code": "A90",
+      "name": "Dengue fever (classical dengue)",
+      "specialty": "infectious_disease",
+      "symptoms_keywords": ["dengue", "dengue fever", "sốt xuất huyết", "breakbone fever", "retro-orbital pain", "rash fever", "thrombocytopenia", "sốt dengue"],
+      "drugs": [
+        "Paracetamol 500–1000 mg Q6H PRN (ONLY — no NSAIDs/aspirin)",
+        "Oral rehydration salts (ORS) for hydration",
+        "IV normal saline (if severe dehydration or haemodynamic instability)"
+      ],
+      "protocol": "Febrile phase (days 1–3): paracetamol only, oral hydration, monitoring. Critical phase (days 4–6): watch for plasma leakage, thrombocytopenia — hospitalise if platelets < 100 000 or warning signs. Recovery phase: reabsorption, avoid fluid overload.",
+      "contraindications": "STRICTLY no ibuprofen, aspirin, or NSAIDs (severe bleeding risk). No intramuscular injections.",
+      "notes": "Warning signs: abdominal pain, persistent vomiting, bleeding, lethargy, rapid deterioration → emergency admission. Notify health authority (notifiable disease)."
+    },
+    {
+      "code": "J02.9",
+      "name": "Acute pharyngitis, unspecified",
+      "specialty": "general",
+      "symptoms_keywords": ["pharyngitis", "sore throat", "tonsilitis", "throat pain", "viêm họng", "đau họng", "viêm amidan"],
+      "drugs": [
+        "Paracetamol 500–1000 mg Q6H PRN (pain)",
+        "Benzydamine 0.15% mouthwash/spray Q3H (local analgesic)",
+        "Phenoxymethylpenicillin 500 mg QDS x10 days (strep pharyngitis)",
+        "Amoxicillin 500 mg TDS x10 days (strep, alternative)"
+      ],
+      "protocol": "Viral: symptomatic only. Bacterial (Group A strep — Centor ≥ 3 or rapid antigen positive): penicillin x10 days. Do not use antibiotics for viral pharyngitis.",
+      "contraindications": "Amoxicillin: avoid if EBV suspected (infective mononucleosis) — causes rash.",
+      "notes": "Centor criteria: tonsillar exudate, tender anterior cervical lymphadenopathy, fever, absence of cough. Rapid strep test if available."
+    },
+    {
+      "code": "K57.3",
+      "name": "Diverticular disease of large intestine without perforation or abscess",
+      "specialty": "gastroenterology",
+      "symptoms_keywords": ["diverticular disease", "diverticulitis", "left lower quadrant pain", "LLQ pain", "bệnh túi thừa đại tràng", "đau hố chậu trái"],
+      "drugs": [
+        "Paracetamol 1 g Q6H (analgesia — avoid opioids if possible)",
+        "Metronidazole 400 mg TDS x7–10 days (antibiotic for diverticulitis)",
+        "Ciprofloxacin 500 mg BD x7–10 days (in combination with metronidazole)",
+        "Mesalazine 1.5–3 g/day (prevention of recurrence)"
+      ],
+      "protocol": "Uncomplicated diverticulitis (mild): oral antibiotics outpatient x7–10 days + liquid diet. Complicated (abscess, perforation, peritonitis): hospitalise, IV antibiotics, surgical review.",
+      "contraindications": "Avoid morphine/opioids if possible (increase intraluminal pressure).",
+      "notes": "High-fibre diet for prevention. CT abdomen/pelvis for diagnosis. Colonoscopy 6–8 weeks after resolution to exclude malignancy."
+    },
+    {
+      "code": "I63.9",
+      "name": "Cerebral infarction, unspecified",
+      "specialty": "neurology",
+      "symptoms_keywords": ["stroke", "cerebral infarction", "ischaemic stroke", "facial droop", "arm weakness", "speech difficulty", "đột quỵ", "nhồi máu não", "liệt nửa người", "méo miệng", "nói khó"],
+      "drugs": [
+        "Aspirin 300 mg stat then 75–100 mg OD (antiplatelet)",
+        "Atorvastatin 40–80 mg OD (statin — all ischaemic stroke)",
+        "Enalapril 5–10 mg OD (BP control — start 24–48 h after acute stroke)",
+        "Alteplase IV 0.9 mg/kg (thrombolysis — within 4.5 h of onset, if eligible)"
+      ],
+      "protocol": "FAST: Face, Arms, Speech, Time. Acute: thrombolysis if within 4.5 h and no contraindications. Secondary prevention: antiplatelet + statin + BP control. AF-related stroke: anticoagulation.",
+      "contraindications": "Thrombolysis: contraindicated if recent surgery, haemorrhagic stroke, uncontrolled BP > 185/110.",
+      "notes": "Urgent brain CT (to exclude haemorrhage before thrombolysis). Stroke unit admission. Multidisciplinary rehab: physiotherapy, speech therapy, occupational therapy."
+    },
+    {
+      "code": "C34.9",
+      "name": "Malignant neoplasm of bronchus and lung, unspecified",
+      "specialty": "oncology",
+      "symptoms_keywords": ["lung cancer", "lung mass", "haemoptysis", "weight loss cough", "ung thư phổi", "ho ra máu", "sụt cân", "khối phổi"],
+      "drugs": [
+        "Cisplatin + Pemetrexed (non-squamous NSCLC, first-line chemo)",
+        "Erlotinib/Gefitinib (EGFR-mutant NSCLC)",
+        "Pembrolizumab (PD-L1 ≥ 50%, first-line immunotherapy)",
+        "Morphine SR 10–30 mg BD (pain and dyspnoea palliation)"
+      ],
+      "protocol": "Staging (TNM) guides treatment. Stage I–II: surgery if resectable. Stage III: concurrent chemoradiation. Stage IV: systemic therapy based on molecular profile (EGFR, ALK, PD-L1). Always tissue biopsy before treatment.",
+      "contraindications": "Immunotherapy: contraindicated in active autoimmune disease on immunosuppressants.",
+      "notes": "Refer to multidisciplinary tumour board. Smoking cessation. Molecular profiling mandatory before starting targeted therapy. Palliative care integration early."
+    },
+    {
+      "code": "E78.5",
+      "name": "Hyperlipidaemia, unspecified",
+      "specialty": "cardiology",
+      "symptoms_keywords": ["hyperlipidaemia", "high cholesterol", "dyslipidaemia", "elevated LDL", "triglycerides high", "mỡ máu cao", "rối loạn mỡ máu", "cholesterol cao"],
+      "drugs": [
+        "Atorvastatin 20–80 mg OD (high-intensity statin, first-line)",
+        "Rosuvastatin 10–40 mg OD (alternative high-intensity statin)",
+        "Ezetimibe 10 mg OD (add-on if LDL target not reached)",
+        "Fenofibrate 145 mg OD (if triglycerides > 5.6 mmol/L)"
+      ],
+      "protocol": "Risk stratification first. High CV risk (10-year risk > 10% or established CVD): target LDL < 1.8 mmol/L. Moderate risk: < 2.6 mmol/L. Start high-intensity statin + lifestyle.",
+      "contraindications": "Statins: avoid in pregnancy. Monitor CK if myalgia. Fibrates + statin: myopathy risk — use cautiously.",
+      "notes": "Diet: reduce saturated fat, trans fat. Exercise. Check LFT and CK at baseline and at 3 months. Annual lipid panel once stable."
+    },
+    {
+      "code": "M10.9",
+      "name": "Gout, unspecified",
+      "specialty": "rheumatology",
+      "symptoms_keywords": ["gout", "gouty arthritis", "uric acid", "podagra", "swollen big toe", "gút", "viêm khớp gút", "axit uric cao", "sưng ngón chân cái", "đau khớp cấp"],
+      "drugs": [
+        "Indomethacin 50 mg TDS (NSAID, acute attack x5–7 days)",
+        "Colchicine 1 mg then 0.5 mg after 1 h (acute attack, first 12 h)",
+        "Prednisolone 30–40 mg OD x5 days (if NSAIDs/colchicine contraindicated)",
+        "Allopurinol 100–300 mg OD (urate-lowering, start ≥ 4 weeks after acute attack resolves)"
+      ],
+      "protocol": "Acute: rapid anti-inflammatory (NSAID, colchicine, or steroid). Do NOT start allopurinol during acute attack. Urate-lowering: allopurinol titrated to serum uric acid < 360 μmol/L (or < 300 μmol/L if tophi).",
+      "contraindications": "NSAIDs: avoid in renal impairment, peptic ulcer. Allopurinol: start low, titrate — risk of allopurinol hypersensitivity syndrome (HLA-B*5801 in Asian — consider screening).",
+      "notes": "Dietary advice: limit red meat, shellfish, alcohol (especially beer). Adequate hydration. Review diuretics that may raise uric acid."
+    },
+    {
+      "code": "K92.1",
+      "name": "Melaena",
+      "specialty": "gastroenterology",
+      "symptoms_keywords": ["melaena", "black stool", "tarry stool", "upper GI bleed", "haematemesis", "phân đen", "xuất huyết tiêu hoá trên", "nôn ra máu"],
+      "drugs": [
+        "Omeprazole 80 mg IV bolus then 8 mg/h infusion (if peptic ulcer suspected — pre-endoscopy)",
+        "Terlipressin 2 mg IV Q4H (if variceal bleed suspected)",
+        "Ceftriaxone 1 g IV OD (antibiotic prophylaxis for variceal bleed)",
+        "Tranexamic acid 1 g IV (adjunct haemostasis)"
+      ],
+      "protocol": "Resuscitate first: IV access x2, type and cross-match, fluid resuscitation. Urgent endoscopy within 24 h (12 h if high risk). Glasgow-Blatchford score to guide admission. NPO pending endoscopy.",
+      "contraindications": "Avoid NSAIDs, anticoagulants until bleeding controlled.",
+      "notes": "Monitor haemoglobin, haemodynamics closely. ICU/HDU if haemodynamically unstable. Surgical review if endoscopy fails."
+    },
+    {
+      "code": "O80",
+      "name": "Encounter for full-term uncomplicated delivery",
+      "specialty": "obstetrics",
+      "symptoms_keywords": ["normal delivery", "labour", "childbirth", "vaginal delivery", "sinh thường", "chuyển dạ", "sinh con"],
+      "drugs": [
+        "Oxytocin 10 IU IM (active management of third stage — prevent PPH)",
+        "Paracetamol 1 g Q6H (post-delivery analgesia)",
+        "Ferrous sulphate 200 mg BD (post-delivery iron supplementation)",
+        "Metronidazole 400 mg TDS x5 days (if episiotomy infection)"
+      ],
+      "protocol": "Active management of third stage (oxytocin + cord traction). Perineal repair if episiotomy/tear. Monitor uterine tone, vital signs post-delivery. Encourage early breastfeeding.",
+      "contraindications": "Oxytocin: avoid in foetal distress (before delivery), uterine scar if not monitored.",
+      "notes": "Rhesus status — anti-D if Rh-negative mother. Postnatal depression screening. Contraception counselling before discharge."
+    },
+    {
+      "code": "Z00.0",
+      "name": "Encounter for general adult medical examination",
+      "specialty": "general",
+      "symptoms_keywords": ["health check", "annual check-up", "routine examination", "well visit", "khám sức khoẻ", "khám tổng quát", "kiểm tra sức khoẻ định kỳ"],
+      "drugs": [],
+      "protocol": "Review vitals, BMI, blood pressure. Screen: lipids, glucose, FBC, LFTs, renal function (age-appropriate). Cancer screening: cervical smear, mammogram, colonoscopy per guidelines. Vaccinations update.",
+      "contraindications": "",
+      "notes": "Document family history, social history, allergies. Lifestyle counselling: diet, exercise, smoking, alcohol. Mental health screen (PHQ-2, GAD-2)."
+    }
+  ]
+}
