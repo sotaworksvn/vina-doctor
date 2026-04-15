@@ -1,5 +1,7 @@
 # Vina Doctor — Agent Guide
 
+**Always use `but-cli` skill for all Git operations.**
+
 ## Repo Overview
 
 Three independent services in a Docker Compose monorepo:
