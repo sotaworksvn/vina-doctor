@@ -15,9 +15,9 @@ export function ConsultationHistoryPage() {
   const totalPages = Math.max(1, Math.ceil(total / limit));
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 sm:max-w-3xl lg:max-w-4xl xl:max-w-5xl">
       <div>
-        <h1 className="font-display text-2xl font-bold text-on-surface sm:text-3xl">
+        <h1 className="font-display text-xl font-bold text-on-surface sm:text-2xl lg:text-3xl">
           Consultation History
         </h1>
         <p className="mt-1 text-sm text-on-surface-variant">
