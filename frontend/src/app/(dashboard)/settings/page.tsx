@@ -1,8 +1,35 @@
 "use client";
 
+import { useState } from "react";
 import { Card, Button, Input } from "@/shared/components";
+import { useToast } from "@/shared/components/ToastContext";
+import { useUpdateApiKey } from "@/features/settings";
 
 export default function SettingsPage() {
+  const { showSuccess, showError } = useToast();
+  const { mutate: updateKey, isPending } = useUpdateApiKey();
+
+  const [apiKey, setApiKey] = useState("");
+
+  function handleApiKeySubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!apiKey.trim()) return;
+    updateKey(
+      { api_key: apiKey.trim() },
+      {
+        onSuccess: () => {
+          showSuccess("DashScope API key updated successfully.");
+          setApiKey("");
+        },
+        onError: (err) => {
+          showError(
+            err instanceof Error ? err.message : "Failed to update API key.",
+          );
+        },
+      },
+    );
+  }
+
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-8">
       <div>
@@ -86,6 +113,31 @@ export default function SettingsPage() {
             </p>
           </button>
         </div>
+      </Card>
+
+      {/* AI Engine API Key */}
+      <Card>
+        <h2 className="mb-1 font-display text-lg font-semibold text-on-surface">
+          AI Engine API Key
+        </h2>
+        <p className="mb-4 text-sm text-on-surface-variant">
+          Update the DashScope API key used by the AI engine. The new key
+          takes effect immediately — no restart required.
+        </p>
+        <form onSubmit={handleApiKeySubmit} className="flex flex-col gap-4">
+          <Input
+            label="DashScope API Key"
+            type="password"
+            placeholder="sk-••••••••••••••••"
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+          />
+          <div className="flex justify-end">
+            <Button type="submit" disabled={isPending || !apiKey.trim()}>
+              {isPending ? "Saving…" : "Save API Key"}
+            </Button>
+          </div>
+        </form>
       </Card>
 
       <div className="flex justify-end gap-3">

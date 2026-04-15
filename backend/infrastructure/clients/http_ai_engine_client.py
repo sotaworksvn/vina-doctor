@@ -30,6 +30,13 @@ class HttpAiEngineClient:
 
         return _map_response_to_soap(data)
 
+    async def update_dashscope_key(self, api_key: str) -> None:
+        """Forward a new DashScope API key to ai_engine via PATCH /v1/config/dashscope-api-key."""
+        url = f"{self._base_url}/v1/config/dashscope-api-key"
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.patch(url, json={"api_key": api_key})
+            response.raise_for_status()
+
 
 def _map_response_to_soap(data: dict) -> SOAPReport:
     report = data.get("clinical_report", {})
