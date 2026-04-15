@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import uuid
 from pathlib import Path
 
@@ -12,6 +13,7 @@ from ai_engine.domain.entities import (
 )
 from ai_engine.domain.protocols import (
     ClinicalAgentProtocol,
+    ICD10SelectorProtocol,
     ModelSelectorProtocol,
     PipelineStateTrackerProtocol,
     ScribeAgentProtocol,
@@ -27,6 +29,8 @@ from ai_engine.processors.audio import (
     validate_and_convert,
     split_audio_at_silence,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class ProcessConsultationError(Exception):
@@ -56,6 +60,10 @@ class ProcessConsultationUseCase:
         state_tracker: PipelineStateTrackerProtocol,
         # Optional: unified-mode dependencies (lazy import avoids circular dep)
         unified_use_case: object | None = None,
+        # Optional: ICD-10 enrichment — inject None to disable statically,
+        # or inject an ICD10SelectorProtocol and control via config_repo toggle.
+        icd10_selector: ICD10SelectorProtocol | None = None,
+        config_repo=None,  # ConfigRepositoryProtocol — used to read runtime toggle
     ) -> None:
         self._vad = vad
         self._scribe = scribe
@@ -64,6 +72,8 @@ class ProcessConsultationUseCase:
         self._model_selector = model_selector
         self._state_tracker = state_tracker
         self._unified_use_case = unified_use_case
+        self._icd10_selector = icd10_selector
+        self._config_repo = config_repo
 
     def execute(
         self,
@@ -176,11 +186,24 @@ class ProcessConsultationUseCase:
         )
         cleaned_text = self._text_cleaner.clean(transcript_text)
 
+        # Step 4b: ICD-10 enrichment (optional — controlled by runtime toggle)
+        clinical_input = cleaned_text
+        if self._icd10_selector is not None and self._icd10_enrich_enabled():
+            self._update_state(session_id, PipelineStatus.CLEANING, "icd10_enrichment")
+            icd10_context = self._icd10_selector.enrich(cleaned_text)
+            if icd10_context:
+                clinical_input = f"{cleaned_text}\n\n{icd10_context}"
+                logger.info("ICD-10 enrichment injected (%d chars)", len(icd10_context))
+            else:
+                logger.debug("ICD-10 selector returned no context for this transcript")
+
         # Step 5: Clinical Agent — transcript → report
         self._update_state(session_id, PipelineStatus.ANALYZING, "clinical_agent")
         clinical_model = model or self._model_selector.select("clinical")
         try:
-            clinical_result = self._clinical.analyze(cleaned_text, model=clinical_model)
+            clinical_result = self._clinical.analyze(
+                clinical_input, model=clinical_model
+            )
         except ClinicalAgentError as exc:
             self._fail(session_id, str(exc))
             raise ProcessConsultationError(f"Clinical agent failed: {exc}") from exc
@@ -205,6 +228,20 @@ class ProcessConsultationUseCase:
     # ------------------------------------------------------------------
     # State helpers
     # ------------------------------------------------------------------
+
+    def _icd10_enrich_enabled(self) -> bool:
+        """Return True if the ICD-10 enrichment toggle is active.
+
+        Reads from the config repo on every call so that a runtime PATCH to
+        ``/v1/config/icd10-enrich`` takes effect immediately without restart.
+        Falls back to ``False`` if no config repo is wired.
+        """
+        if self._config_repo is None:
+            return False
+        try:
+            return bool(self._config_repo.get_icd10_enrich_enabled())
+        except Exception:  # noqa: BLE001
+            return False
 
     def _update_state(
         self,

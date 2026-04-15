@@ -40,3 +40,16 @@ class TextCleanerProtocol(Protocol):
     """Redacts PII and normalises text before it reaches external LLMs."""
 
     def clean(self, text: str) -> str: ...
+
+
+class ICD10SelectorProtocol(Protocol):
+    """Selects relevant ICD-10 codes for a transcript and returns an enriched
+    treatment reference block for the clinical agent.
+
+    The ``enrich()`` method must be fail-safe: any internal error should be
+    caught and an empty string returned so the pipeline continues unaffected.
+    """
+
+    def enrich(self, transcript: str) -> str:
+        """Return an ICD-10 treatment reference block, or '' on failure."""
+        ...

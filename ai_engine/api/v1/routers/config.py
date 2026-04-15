@@ -7,6 +7,9 @@ from ai_engine.application.use_cases.update_api_key_use_case import UpdateApiKey
 from ai_engine.application.use_cases.update_dashscope_url_use_case import (
     UpdateDashscopeUrlUseCase,
 )
+from ai_engine.application.use_cases.update_icd10_enrich_use_case import (
+    UpdateICD10EnrichUseCase,
+)
 from ai_engine.application.use_cases.update_model_use_case import UpdateModelUseCase
 
 router = APIRouter(prefix="/v1/config", tags=["config"])
@@ -54,6 +57,11 @@ class UpdateModelRequest(BaseModel):
 class ConfigResponse(BaseModel):
     dashscope_base_url: str
     models: dict[str, str]
+    icd10_enrich_enabled: bool
+
+
+class UpdateICD10EnrichRequest(BaseModel):
+    enabled: bool
 
 
 # ---------------------------------------------------------------------------
@@ -83,6 +91,12 @@ def _get_config_repo():
     from ai_engine.main import get_config_repo  # noqa: PLC0415
 
     return get_config_repo()
+
+
+def _get_update_icd10_enrich_use_case() -> UpdateICD10EnrichUseCase:
+    from ai_engine.main import get_update_icd10_enrich_use_case  # noqa: PLC0415
+
+    return get_update_icd10_enrich_use_case()
 
 
 # ---------------------------------------------------------------------------
@@ -164,7 +178,7 @@ def update_model(
     "",
     response_model=ConfigResponse,
     summary="Get current runtime configuration",
-    description="Returns the active DashScope base URL and per-task model overrides.",
+    description="Returns the active DashScope base URL, per-task model overrides, and ICD-10 enrichment toggle.",
 )
 def get_config(
     config_repo=Depends(_get_config_repo),
@@ -173,4 +187,24 @@ def get_config(
     return ConfigResponse(
         dashscope_base_url=data["dashscope_base_url"],
         models=data["models"],
+        icd10_enrich_enabled=data.get("icd10_enrich_enabled", False),
     )
+
+
+@router.patch(
+    "/icd10-enrich",
+    status_code=status.HTTP_204_NO_CONTENT,
+    summary="Enable or disable ICD-10 context enrichment at runtime",
+    description=(
+        "Toggles ICD-10 enrichment for the TWO_STEP consultation pipeline. "
+        "When enabled, a lightweight LLM call selects the most relevant ICD-10 "
+        "codes from the catalogue and injects treatment guidelines into the "
+        "clinical agent prompt.  Change takes effect on the next request — "
+        "no restart required."
+    ),
+)
+def update_icd10_enrich(
+    body: UpdateICD10EnrichRequest,
+    use_case: UpdateICD10EnrichUseCase = Depends(_get_update_icd10_enrich_use_case),
+) -> None:
+    use_case.execute(enabled=body.enabled)

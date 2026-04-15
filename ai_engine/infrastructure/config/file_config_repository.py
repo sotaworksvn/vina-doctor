@@ -32,6 +32,7 @@ class FileConfigRepository:
     _KEY_DASHSCOPE = "dashscope_api_key"
     _KEY_BASE_URL = "dashscope_base_url"
     _KEY_MODELS = "models"
+    _KEY_ICD10_ENRICH = "icd10_enrich_enabled"
 
     def __init__(self, path: str | Path = "/app/config/runtime.json") -> None:
         self._path = Path(path)
@@ -94,7 +95,20 @@ class FileConfigRepository:
         return {
             "dashscope_base_url": data.get(self._KEY_BASE_URL) or DEFAULT_DASHSCOPE_URL,
             "models": data.get(self._KEY_MODELS) or {},
+            "icd10_enrich_enabled": data.get(self._KEY_ICD10_ENRICH, False),
         }
+
+    def get_icd10_enrich_enabled(self) -> bool:
+        """Return whether ICD-10 context enrichment is currently enabled."""
+        data = self._read()
+        value = data.get(self._KEY_ICD10_ENRICH, False)
+        return bool(value)
+
+    def set_icd10_enrich_enabled(self, enabled: bool) -> None:
+        """Atomically persist the ICD-10 enrichment toggle."""
+        data = self._read()
+        data[self._KEY_ICD10_ENRICH] = bool(enabled)
+        self._write(data)
 
     # ------------------------------------------------------------------
     # Internal helpers
