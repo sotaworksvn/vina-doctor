@@ -97,15 +97,6 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
         apply_key=lambda k: setattr(dashscope, "api_key", k),
     )
 
-    # ------------------------------------------------------------------
-    # Runtime config use case — apply_key is a closure that mutates the
-    # dashscope module global so UpdateApiKeyUseCase stays infra-free.
-    # ------------------------------------------------------------------
-    _update_api_key_use_case = UpdateApiKeyUseCase(
-        config_repo=config_repo,
-        apply_key=lambda k: setattr(dashscope, "api_key", k),
-    )
-
     # Shared infrastructure
     client = QwenAudioClient()
     vad = VoiceActivityDetector()
