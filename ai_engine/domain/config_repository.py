@@ -34,6 +34,14 @@ class ConfigRepositoryProtocol(Protocol):
         """Persist *model_id* as the runtime override for *task*."""
         ...
 
+    def get_icd10_enrich_enabled(self) -> bool:
+        """Return whether ICD-10 context enrichment is enabled."""
+        ...
+
+    def set_icd10_enrich_enabled(self, enabled: bool) -> None:
+        """Persist the ICD-10 enrichment toggle."""
+        ...
+
     def get_all_config(self) -> dict:
         """Return a dict of all persisted configuration values."""
         ...
