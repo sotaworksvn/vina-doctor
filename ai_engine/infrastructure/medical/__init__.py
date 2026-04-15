@@ -1,0 +1,1 @@
+"""Infrastructure — medical knowledge layer."""

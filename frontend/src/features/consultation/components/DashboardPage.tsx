@@ -45,7 +45,7 @@ export function DashboardPage() {
       </div>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 gap-4 xs:grid-cols-3 sm:gap-6">
+      <div className="grid grid-cols-3 gap-4 sm:gap-6">
         <Card>
           <p className="text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
             Today&apos;s Consultations
