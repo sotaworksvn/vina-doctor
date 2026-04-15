@@ -18,4 +18,16 @@ export type {
   UpdateModelRequest,
   AdminConfigResponse,
 } from "./types";
+export {
+  ModelPreferenceCard,
+  useModelPreference,
+  PRESET_MODELS,
+  TASK_LABELS,
+  TASK_DESCRIPTIONS,
+  DEFAULT_MODELS,
+  type TaskKey,
+  type ModelOption,
+  type ModelPreferenceConfig,
+  type UseModelPreferenceOptions,
+} from "./model-preference";
 
