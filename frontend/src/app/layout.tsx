@@ -30,7 +30,7 @@ export default function RootLayout({
       lang="en"
       className={`${plusJakarta.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-surface text-on-surface">
+      <body className="min-h-full flex flex-col overflow-x-hidden bg-surface text-on-surface">
         <Providers>{children}</Providers>
       </body>
     </html>
