@@ -37,7 +37,7 @@ export function AudioUploadZone({
       }}
       onDragLeave={() => setDragOver(false)}
       onDrop={handleDrop}
-      className={`flex cursor-pointer flex-col items-center justify-center gap-4 rounded-3xl border-2 border-dashed px-8 py-16 transition-colors ${
+      className={`flex cursor-pointer flex-col items-center justify-center gap-4 rounded-3xl border-2 border-dashed px-6 py-12 transition-colors sm:px-8 sm:py-16 ${
         dragOver
           ? "border-primary-container bg-[var(--primary-fixed)]/10"
           : "border-outline-variant bg-surface-lowest hover:border-primary-container"
