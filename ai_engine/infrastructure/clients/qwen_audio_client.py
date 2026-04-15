@@ -14,7 +14,7 @@ class QwenAudioClient:
     before instantiation (handled by the app factory in main.py).
     """
 
-    DEFAULT_MODEL = "qwen-audio-turbo"
+    DEFAULT_MODEL = "qwen3.5-omni-flash"
 
     def __init__(self, model: str = DEFAULT_MODEL) -> None:
         self._model = model

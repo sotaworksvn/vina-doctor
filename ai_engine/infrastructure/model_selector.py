@@ -11,9 +11,9 @@ class ModelSelector:
     """
 
     _DEFAULTS: dict[str, str] = {
-        "scribe": "qwen-audio-turbo",
-        "clinical": "qwen-audio-turbo",
-        "clinical_complex": "qwen-audio-max",
+        "scribe": "qwen3.5-omni-flash",
+        "clinical": "qwen3.5-omni-flash",
+        "clinical_complex": "qwen3.5-omni-flash",
     }
 
     def select(self, task: str) -> str:

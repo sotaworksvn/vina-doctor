@@ -10,6 +10,7 @@ from backend.core.config import get_settings
 from backend.domain.errors import AccessDeniedError, NotFoundError
 from backend.infrastructure.db.models import Base
 from backend.infrastructure.db.session import get_engine, init_db
+from backend.api.v1.routers.admin import router as admin_router
 from backend.api.v1.routers.auth import router as auth_router
 from backend.api.v1.routers.consultations import router as consultations_router
 from backend.api.v1.routers.reports import router as reports_router
@@ -62,6 +63,7 @@ def create_app() -> FastAPI:
     # ---------------------------------------------------------------------------
 
     prefix = "/api/v1"
+    app.include_router(admin_router, prefix=prefix)
     app.include_router(auth_router, prefix=prefix)
     app.include_router(consultations_router, prefix=prefix)
     app.include_router(reports_router, prefix=prefix)

@@ -14,3 +14,7 @@ class AiEngineClientProtocol(Protocol):
         filename: str,
         model: str = "qwen-audio-turbo",
     ) -> SOAPReport: ...
+
+    async def update_dashscope_key(self, api_key: str) -> None:
+        """Push a new DashScope API key to ai_engine at runtime."""
+        ...

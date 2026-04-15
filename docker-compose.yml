@@ -34,6 +34,8 @@ services:
     image: ${AI_ENGINE_IMAGE:-ghcr.io/sotaworksvn/vina-doctor/ai-engine:latest}
     env_file:
       - .env
+    volumes:
+      - ai_engine_config:/app/config
     networks:
       - app-net
     restart: unless-stopped
@@ -101,5 +103,6 @@ networks:
 
 # ── Named volumes ──────────────────────────────────────────────────────────────
 volumes:
-  postgres_data:    # PostgreSQL data directory
-  audio_data:       # Audio file uploads
+  postgres_data:      # PostgreSQL data directory
+  audio_data:         # Audio file uploads
+  ai_engine_config:   # Runtime config (persisted DashScope API key)
