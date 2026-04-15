@@ -11,8 +11,13 @@ export interface UpdateModelRequest {
   model_id: string;
 }
 
+export interface UpdateIcd10EnrichRequest {
+  enabled: boolean;
+}
+
 export interface AdminConfigResponse {
   dashscope_base_url: string;
   models: Record<string, string>;
+  icd10_enrich_enabled: boolean;
 }
 
