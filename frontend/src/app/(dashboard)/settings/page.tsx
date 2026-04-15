@@ -9,6 +9,7 @@ import {
   useAdminConfig,
   useUserProfile,
   useUpdateUserProfile,
+  useUpdateIcd10Enrich,
   ModelPreferenceCard,
 } from "@/features/settings";
 
@@ -19,6 +20,7 @@ export default function SettingsPage() {
 
   const { mutate: updateKey, isPending: isKeyPending } = useUpdateApiKey();
   const { mutate: updateUrl, isPending: isUrlPending } = useUpdateDashscopeUrl();
+  const { mutate: updateIcd10Enrich, isPending: isIcd10Pending } = useUpdateIcd10Enrich();
   const { data: remoteConfig, isLoading: isConfigLoading } = useAdminConfig();
 
   // ── Doctor Profile ──────────────────────────────────────────────────────────
@@ -253,6 +255,58 @@ export default function SettingsPage() {
             </Button>
           </div>
         </form>
+
+        <hr className="border-outline-variant" />
+
+        {/* ICD-10 enrichment toggle */}
+        <div className="mt-6 flex items-start justify-between gap-4">
+          <div className="flex flex-col gap-1">
+            <label className="text-sm font-semibold text-on-surface">
+              ICD-10 Context Injection
+            </label>
+            <p className="text-xs text-on-surface-variant">
+              Inject relevant ICD-10 treatment references into the Clinical Agent
+              prompt. The agent selects 1–3 codes from a built-in catalogue.
+              Changes take effect immediately — no restart required.
+            </p>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={remoteConfig?.icd10_enrich_enabled ?? false}
+            onClick={() => {
+              updateIcd10Enrich(
+                { enabled: !remoteConfig?.icd10_enrich_enabled },
+                {
+                  onSuccess: () =>
+                    showSuccess(
+                      `ICD-10 enrichment ${!remoteConfig?.icd10_enrich_enabled ? "enabled" : "disabled"}.`,
+                    ),
+                  onError: (err) =>
+                    showError(
+                      err instanceof Error
+                        ? err.message
+                        : "Failed to update ICD-10 enrichment setting.",
+                    ),
+                },
+              );
+            }}
+            disabled={isIcd10Pending}
+            className={`mt-0.5 relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-container ${
+              remoteConfig?.icd10_enrich_enabled
+                ? "bg-primary-container"
+                : "bg-outline-variant"
+            } ${isIcd10Pending ? "opacity-50" : ""}`}
+          >
+            <span
+              className={`absolute top-1 h-4 w-4 rounded-full bg-on-primary-container transition-transform duration-200 ${
+                remoteConfig?.icd10_enrich_enabled
+                  ? "translate-x-6"
+                  : "translate-x-1"
+              }`}
+            />
+          </button>
+        </div>
       </Card>
     </div>
   );

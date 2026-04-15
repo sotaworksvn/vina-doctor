@@ -4,6 +4,7 @@ import type {
   AdminConfigResponse,
   UpdateApiKeyRequest,
   UpdateDashscopeUrlRequest,
+  UpdateIcd10EnrichRequest,
   UpdateModelRequest,
 } from "@/features/settings/types";
 
@@ -46,13 +47,23 @@ export async function updateDashscopeUrl(
 }
 
 /**
- * PATCH /api/v1/admin/config/model
+ * PATCH /v1/admin/config/model
  * Overrides the model ID for a given pipeline task (scribe/clinical/etc.).
  */
 export async function updateModel(
   payload: UpdateModelRequest,
 ): Promise<void> {
   return api.patch<void>("/admin/config/model", payload);
+}
+
+/**
+ * PATCH /v1/config/icd10-enrich
+ * Toggles ICD-10 context injection into the Clinical Agent pipeline at runtime.
+ */
+export async function updateIcd10Enrich(
+  payload: UpdateIcd10EnrichRequest,
+): Promise<void> {
+  return api.patch<void>("/config/icd10-enrich", payload);
 }
 
 /**
