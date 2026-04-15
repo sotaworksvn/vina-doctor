@@ -16,11 +16,11 @@ export function DashboardPage() {
   const done = items.filter((c) => c.status === "done").length;
 
   return (
-    <div className="mx-auto flex w-full max-w-3xl flex-col gap-8 sm:max-w-4xl lg:max-w-5xl xl:max-w-6xl">
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 sm:max-w-3xl lg:max-w-4xl xl:max-w-5xl">
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <h1 className="font-display text-2xl font-bold text-on-surface sm:text-3xl">
+          <h1 className="font-display text-xl font-bold text-on-surface sm:text-2xl lg:text-3xl">
             Good morning, Doctor
           </h1>
           <p className="mt-1 text-sm text-on-surface-variant">
@@ -45,7 +45,7 @@ export function DashboardPage() {
       </div>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6">
+      <div className="grid grid-cols-1 gap-4 xs:grid-cols-3 sm:gap-6">
         <Card>
           <p className="text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
             Today&apos;s Consultations
