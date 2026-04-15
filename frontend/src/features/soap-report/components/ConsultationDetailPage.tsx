@@ -18,7 +18,7 @@ export function ConsultationDetailPage({ id }: { id: string }) {
 
   if (consultation.isLoading) {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 sm:max-w-3xl lg:max-w-4xl xl:max-w-5xl">
         {[1, 2, 3].map((i) => (
           <div key={i} className="h-20 animate-pulse rounded-2xl bg-surface-low" />
         ))}
@@ -40,7 +40,7 @@ export function ConsultationDetailPage({ id }: { id: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6 sm:max-w-3xl lg:max-w-4xl xl:max-w-5xl">
       {/* Header */}
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
@@ -53,7 +53,7 @@ export function ConsultationDetailPage({ id }: { id: string }) {
             </svg>
             Back
           </Link>
-          <h1 className="font-display text-xl font-bold text-on-surface sm:text-2xl">
+          <h1 className="font-display text-xl font-bold text-on-surface sm:text-2xl lg:text-3xl">
             Consultation #{c?.id.slice(0, 8)}
           </h1>
           <p className="mt-1 text-xs text-on-surface-variant">
