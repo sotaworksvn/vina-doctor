@@ -38,8 +38,9 @@ def validate_and_convert(source_path: Path, output_dir: Path) -> Path:
         )
 
     if suffix == _TARGET_EXTENSION:
-        # Already mp3 — copy to output dir to keep temp management consistent.
         dest = output_dir / source_path.name
+        if source_path.resolve() == dest.resolve():
+            return dest
         shutil.copy2(source_path, dest)
         return dest
 
