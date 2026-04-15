@@ -53,8 +53,8 @@ def _get_consultation_use_case() -> ProcessConsultationUseCase:
 async def process_consultation(
     file: UploadFile,
     model: str = Query(
-        default="qwen-audio-turbo",
-        description="Qwen model to use. Use 'qwen-audio-max' for long/complex recordings.",
+        default="qwen3.5-omni-flash",
+        description="Qwen model to use. Use 'qwen3.5-omni-flash' for all audio tasks.",
     ),
     use_case: ProcessAudioUseCase = Depends(_get_use_case),
 ) -> ProcessAudioResponse:

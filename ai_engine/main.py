@@ -86,6 +86,16 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
             "PATCH /v1/config/dashscope-api-key after startup."
         )
     dashscope.api_key = api_key
+    dashscope.base_http_api_url = "https://dashscope-intl.aliyuncs.com/api/v1"
+
+    # ------------------------------------------------------------------
+    # Runtime config use case — apply_key is a closure that mutates the
+    # dashscope module global so UpdateApiKeyUseCase stays infra-free.
+    # ------------------------------------------------------------------
+    _update_api_key_use_case = UpdateApiKeyUseCase(
+        config_repo=config_repo,
+        apply_key=lambda k: setattr(dashscope, "api_key", k),
+    )
 
     # ------------------------------------------------------------------
     # Runtime config use case — apply_key is a closure that mutates the
