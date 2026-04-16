@@ -21,11 +21,12 @@ backend/.env
 *.db
 *.sqlite3
 
-# IDE
+# IDE / Tools
 .vscode/
 .idea/
 *.swp
 *.swo
+.opencode/
 
 # OS
 .DS_Store
