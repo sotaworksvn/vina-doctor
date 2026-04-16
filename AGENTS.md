@@ -1,6 +1,6 @@
 # Vina Doctor — Agent Guide
 
-**Always use `but-cli` skill for all Git operations.**
+**Use `git` CLI normally. Only use `but-cli` skill when on `gitbutler/workspace` branches.**
 
 ## Repo Overview
 
@@ -59,17 +59,28 @@ The `docs/ai_model.md` doc describes Qwen3 models — the implementation has NOT
 
 ## Git Workflow
 
-**Always use GitButler CLI (`but`)** for all Git operations. Never run `docker`/`docker-compose` directly on remote servers or do manual deployments.
+**Use normal `git` CLI** for regular branches. Only use **GitButler CLI (`but`)** when on a `gitbutler/workspace` branch.
 
 ```bash
-# Standard workflow (ALWAYS follow this sequence):
-but branch new <branch-name>           # Create branch
-but stage <file-id> <branch-name>     # Stage files (use IDs from but status -f)
-but commit <branch-name> -m "msg"      # Commit
-but push <branch-name>                 # Push to remote
-# If but pr fails (no authenticated forge), use gh CLI:
+# On regular branches — use git CLI normally
+git checkout -b feature/my-feature
+git add . && git commit -m "feat: description"
+git push -u origin feature/my-feature
+
+# On gitbutler/workspace branches — use but CLI
+but branch new <branch-name>
+but stage <file-id> <branch-name>
+but commit <branch-name> -m "msg"
+but push <branch-name>
+```
+
+**PR workflow (all branches):**
+
+```bash
+# Create PR via gh CLI
 gh pr create --title "..." --body "..." --base main --head <branch-name> --repo sotaworksvn/vina-doctor
-# Wait for CI to pass, then merge automatically:
+
+# After CI passes, merge automatically
 gh pr merge <pr-number> --squash --auto --delete-branch --repo sotaworksvn/vina-doctor
 ```
 
