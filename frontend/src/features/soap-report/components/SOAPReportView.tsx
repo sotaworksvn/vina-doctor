@@ -129,9 +129,9 @@ export function SOAPReportView({ report }: { report: SOAPReport }) {
             </button>
             {isOpen && (
               <div className="border-t border-outline-variant/15 px-6 py-4">
-                <p className="whitespace-pre-wrap text-sm leading-relaxed text-on-surface">
+                <pre className="text-sm leading-relaxed text-on-surface whitespace-pre-wrap font-inherit">
                   {content}
-                </p>
+                </pre>
               </div>
             )}
           </div>
