@@ -1,4 +1,6 @@
 # ── Stage 1: Builder ────────────────────────────────────────────────────────
+# NEXT_PUBLIC_DISABLE_AUTH is passed as a build ARG from docker-compose.yml / CI
+# and baked into the bundle at build time.
 FROM node:20-alpine AS builder
 
 # Enable corepack so pnpm is available without a separate install
