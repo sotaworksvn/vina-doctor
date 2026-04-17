@@ -1,5 +1,7 @@
 import type { ApiError } from "@/shared/types/api";
 
+const DISABLE_AUTH = process.env.NEXT_PUBLIC_DISABLE_AUTH === "true";
+
 function getBaseUrl(): string {
   if (typeof window !== "undefined") {
     return `${window.location.protocol}//${window.location.host}`;
@@ -33,7 +35,7 @@ async function request<T>(
 ): Promise<T> {
   const headers = new Headers(options.headers);
 
-  if (_token) {
+  if (_token && _token !== "auth-disabled") {
     headers.set("Authorization", `Bearer ${_token}`);
   }
 
@@ -50,7 +52,7 @@ async function request<T>(
   });
 
   if (!res.ok) {
-    if (res.status === 401 && typeof window !== "undefined") {
+    if (res.status === 401 && !DISABLE_AUTH && typeof window !== "undefined") {
       setAuthToken(null);
       window.location.href = "/login";
       throw new ApiRequestError(401, { detail: "Session expired" });
