@@ -68,6 +68,7 @@ jobs:
           build-args: |
             NEXT_PUBLIC_BACKEND_URL=http://${{ secrets.ECS_HOST }}
             NEXT_PUBLIC_AI_ENGINE_URL=http://${{ secrets.ECS_HOST }}
+            NEXT_PUBLIC_DISABLE_AUTH=true
 
   deploy:
     name: Deploy to ECS
