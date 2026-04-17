@@ -16,11 +16,21 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 const TOKEN_KEY = "vd_token";
+const ANONYMOUS_ID_KEY = "vd_anonymous_uid";
 const DISABLE_AUTH = process.env.NEXT_PUBLIC_DISABLE_AUTH === "true";
 
-// Stub token used when auth is disabled — not a real JWT but keeps
-// isAuthenticated=true so components that check it don't break.
-const STUB_TOKEN = "auth-disabled";
+function getOrCreateAnonymousId(): string {
+  if (typeof window === "undefined") return "";
+  const stored = localStorage.getItem(ANONYMOUS_ID_KEY);
+  if (stored) return stored;
+  const id = crypto.randomUUID();
+  localStorage.setItem(ANONYMOUS_ID_KEY, id);
+  return id;
+}
+
+function buildAnonToken(uuid: string): string {
+  return `anon-${uuid}`;
+}
 
 function setTokenCookie(token: string | null) {
   if (typeof document === "undefined") return;
@@ -32,12 +42,13 @@ function setTokenCookie(token: string | null) {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  // When auth is disabled, always appear authenticated with a stub token.
   const [token, setToken] = useState<string | null>(() => {
     if (DISABLE_AUTH) {
-      setTokenCookie(STUB_TOKEN);
-      setAuthToken(STUB_TOKEN);
-      return STUB_TOKEN;
+      const anonId = getOrCreateAnonymousId();
+      const anonToken = buildAnonToken(anonId);
+      setTokenCookie(anonToken);
+      setAuthToken(anonToken);
+      return anonToken;
     }
     if (typeof window === "undefined") return null;
     const stored = sessionStorage.getItem(TOKEN_KEY);
@@ -77,7 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const logout = useCallback(() => {
-    if (DISABLE_AUTH) return; // no-op when auth is disabled
+    if (DISABLE_AUTH) return;
     setToken(null);
     setAuthToken(null);
     setTokenCookie(null);

@@ -36,7 +36,12 @@ async function request<T>(
   const headers = new Headers(options.headers);
 
   if (_token && _token !== "auth-disabled") {
-    headers.set("Authorization", `Bearer ${_token}`);
+    if (_token.startsWith("anon-") && DISABLE_AUTH) {
+      const uuid = _token.replace("anon-", "");
+      headers.set("X-Anonymous-UID", uuid);
+    } else if (!_token.startsWith("anon-")) {
+      headers.set("Authorization", `Bearer ${_token}`);
+    }
   }
 
   if (
