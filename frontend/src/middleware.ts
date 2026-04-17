@@ -1,9 +1,18 @@
 import { NextResponse, type NextRequest } from "next/server";
 
 const PUBLIC_PATHS = ["/login"];
+const DISABLE_AUTH = process.env.NEXT_PUBLIC_DISABLE_AUTH === "true";
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Feature flag: bypass all auth checks — redirect /login to home
+  if (DISABLE_AUTH) {
+    if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+    return NextResponse.next();
+  }
 
   if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {
     return NextResponse.next();

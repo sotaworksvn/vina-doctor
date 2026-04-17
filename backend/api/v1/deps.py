@@ -29,6 +29,7 @@ from backend.application.use_cases.retry_consultation_use_case import (
     RetryConsultationUseCase,
 )
 from backend.core.config import get_settings
+from backend.core.feature_flags import is_auth_disabled
 from backend.core.security import (
     create_access_token,
     decode_access_token,
@@ -182,6 +183,8 @@ def get_get_report_use_case(
 # Auth guard
 # ---------------------------------------------------------------------------
 
+_DUMMY_USER_ID = UUID("00000000-0000-0000-0000-000000000001")
+
 
 def get_current_user_id(
     credentials: HTTPAuthorizationCredentials = Depends(_bearer),
@@ -200,3 +203,22 @@ def get_current_user_id(
             detail="Invalid or expired token.",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+
+def get_optional_user_id(
+    credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
+) -> UUID:
+    """Auth guard that respects the DISABLE_AUTH feature flag.
+
+    When DISABLE_AUTH=true, skips token validation and returns a fixed dummy
+    UUID so every protected endpoint works without a real user account.
+    """
+    if is_auth_disabled():
+        return _DUMMY_USER_ID
+    if credentials is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return get_current_user_id(credentials)
