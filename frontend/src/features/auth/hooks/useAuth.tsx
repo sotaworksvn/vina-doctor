@@ -16,6 +16,11 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 const TOKEN_KEY = "vd_token";
+const DISABLE_AUTH = process.env.NEXT_PUBLIC_DISABLE_AUTH === "true";
+
+// Stub token used when auth is disabled — not a real JWT but keeps
+// isAuthenticated=true so components that check it don't break.
+const STUB_TOKEN = "auth-disabled";
 
 function setTokenCookie(token: string | null) {
   if (typeof document === "undefined") return;
@@ -27,7 +32,13 @@ function setTokenCookie(token: string | null) {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  // When auth is disabled, always appear authenticated with a stub token.
   const [token, setToken] = useState<string | null>(() => {
+    if (DISABLE_AUTH) {
+      setTokenCookie(STUB_TOKEN);
+      setAuthToken(STUB_TOKEN);
+      return STUB_TOKEN;
+    }
     if (typeof window === "undefined") return null;
     const stored = sessionStorage.getItem(TOKEN_KEY);
     if (stored) {
@@ -39,6 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(
     async (credentials: LoginCredentials): Promise<boolean> => {
+      if (DISABLE_AUTH) return true;
       const res = await loginApi(credentials);
       const t = res.access_token;
       setToken(t);
@@ -52,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = useCallback(
     async (credentials: RegisterCredentials): Promise<boolean> => {
+      if (DISABLE_AUTH) return true;
       const res = await registerApi(credentials);
       const t = res.access_token;
       setToken(t);
@@ -64,6 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const logout = useCallback(() => {
+    if (DISABLE_AUTH) return; // no-op when auth is disabled
     setToken(null);
     setAuthToken(null);
     setTokenCookie(null);
