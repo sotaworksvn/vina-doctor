@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from datetime import datetime
 from uuid import UUID
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from backend.application.services.consultation_orchestrator import (
@@ -48,6 +49,9 @@ from backend.infrastructure.repositories.sqlalchemy_user_repository import (
     SqlAlchemyUserRepository,
 )
 from backend.infrastructure.storage.local_audio_storage import LocalAudioStorage
+from backend.domain.entities import User
+from backend.domain.errors import NotFoundError
+from backend.domain.repositories import UserRepository
 
 _bearer = HTTPBearer()
 
@@ -206,14 +210,37 @@ def get_current_user_id(
 
 
 def get_optional_user_id(
+    request: Request,
+    user_repo: UserRepository = Depends(get_user_repo),
     credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
 ) -> UUID:
     """Auth guard that respects the DISABLE_AUTH feature flag.
 
-    When DISABLE_AUTH=true, skips token validation and returns a fixed dummy
-    UUID so every protected endpoint works without a real user account.
+    When DISABLE_AUTH=true, reads the X-Anonymous-UID header (sent by the
+    frontend) and returns it as the user UUID. Each browser gets a persistent
+    anonymous identity stored in localStorage, so users see their own data
+    across sessions. If the anonymous user does not yet exist in the database,
+    it is auto-created.
     """
     if is_auth_disabled():
+        anon_uid = request.headers.get("X-Anonymous-UID")
+        if anon_uid:
+            user_id = UUID(anon_uid)
+            try:
+                user_repo.get_by_id(user_id)
+            except NotFoundError:
+                anon_user = User(
+                    id=user_id,
+                    email=f"anon_{user_id}@vina-doctor.local",
+                    hashed_password="",
+                    full_name="Anonymous User",
+                    specialty="",
+                    license_number="",
+                    phone="",
+                    created_at=datetime.utcnow(),
+                )
+                user_repo.save(anon_user)
+            return user_id
         return _DUMMY_USER_ID
     if credentials is None:
         raise HTTPException(
