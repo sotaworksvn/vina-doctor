@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import delete, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from backend.domain.entities import (
@@ -48,6 +48,12 @@ class SqlAlchemyReportRepository(ReportRepository):
         if model is None:
             raise NotFoundError("Report", consultation_id)
         return _to_entity(model)
+
+    async def delete_by_consultation(self, consultation_id: UUID) -> None:
+        await self._session.execute(
+            delete(ReportModel).where(ReportModel.consultation_id == consultation_id)
+        )
+        await self._session.commit()
 
 
 def _to_entity(model: ReportModel) -> Report:

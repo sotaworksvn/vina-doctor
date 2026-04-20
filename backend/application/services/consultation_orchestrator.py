@@ -52,6 +52,7 @@ class ConsultationOrchestrator:
                 soap=soap,
                 transcript=transcript,
             )
+            await self._report_repo.delete_by_consultation(consultation_id)
             saved_report = await self._report_repo.save(report)
 
             await self._consultation_repo.update_status(
