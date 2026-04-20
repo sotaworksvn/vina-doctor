@@ -16,6 +16,21 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 const TOKEN_KEY = "vd_token";
+const ANONYMOUS_ID_KEY = "vd_anonymous_uid";
+const DISABLE_AUTH = process.env.NEXT_PUBLIC_DISABLE_AUTH === "true";
+
+function getOrCreateAnonymousId(): string {
+  if (typeof window === "undefined") return "";
+  const stored = localStorage.getItem(ANONYMOUS_ID_KEY);
+  if (stored) return stored;
+  const id = crypto.randomUUID();
+  localStorage.setItem(ANONYMOUS_ID_KEY, id);
+  return id;
+}
+
+function buildAnonToken(uuid: string): string {
+  return `anon-${uuid}`;
+}
 
 function setTokenCookie(token: string | null) {
   if (typeof document === "undefined") return;
@@ -28,6 +43,13 @@ function setTokenCookie(token: string | null) {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [token, setToken] = useState<string | null>(() => {
+    if (DISABLE_AUTH) {
+      const anonId = getOrCreateAnonymousId();
+      const anonToken = buildAnonToken(anonId);
+      setTokenCookie(anonToken);
+      setAuthToken(anonToken);
+      return anonToken;
+    }
     if (typeof window === "undefined") return null;
     const stored = sessionStorage.getItem(TOKEN_KEY);
     if (stored) {
@@ -39,6 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = useCallback(
     async (credentials: LoginCredentials): Promise<boolean> => {
+      if (DISABLE_AUTH) return true;
       const res = await loginApi(credentials);
       const t = res.access_token;
       setToken(t);
@@ -52,6 +75,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = useCallback(
     async (credentials: RegisterCredentials): Promise<boolean> => {
+      if (DISABLE_AUTH) return true;
       const res = await registerApi(credentials);
       const t = res.access_token;
       setToken(t);
@@ -64,6 +88,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   );
 
   const logout = useCallback(() => {
+    if (DISABLE_AUTH) return;
     setToken(null);
     setAuthToken(null);
     setTokenCookie(null);

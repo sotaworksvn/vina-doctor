@@ -4,7 +4,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends
 
-from backend.api.v1.deps import get_current_user_id, get_user_repo
+from backend.api.v1.deps import get_optional_user_id, get_user_repo
 from backend.api.v1.schemas.user import (
     UserProfileResponse,
     UserProfileUpdateRequest,
@@ -18,7 +18,7 @@ router = APIRouter(prefix="/users", tags=["users"])
     "/me", response_model=UserProfileResponse, summary="Get current doctor profile"
 )
 async def get_me(
-    user_id: UUID = Depends(get_current_user_id),
+    user_id: UUID = Depends(get_optional_user_id),
     user_repo: UserRepository = Depends(get_user_repo),
 ) -> UserProfileResponse:
     user = await user_repo.get_by_id(user_id)
@@ -40,7 +40,7 @@ async def get_me(
 )
 async def update_me(
     body: UserProfileUpdateRequest,
-    user_id: UUID = Depends(get_current_user_id),
+    user_id: UUID = Depends(get_optional_user_id),
     user_repo: UserRepository = Depends(get_user_repo),
 ) -> UserProfileResponse:
     user = await user_repo.get_by_id(user_id)

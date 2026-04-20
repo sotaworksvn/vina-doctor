@@ -4,7 +4,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from backend.api.v1.deps import get_current_user_id, get_get_report_use_case
+from backend.api.v1.deps import get_optional_user_id, get_get_report_use_case
 from backend.api.v1.schemas.report import (
     MedicationSchema,
     MultilingualTextSchema,
@@ -45,7 +45,7 @@ def _to_response(report: Report) -> ReportResponse:
 )
 async def get_report(
     consultation_id: UUID,
-    doctor_id: UUID = Depends(get_current_user_id),
+    doctor_id: UUID = Depends(get_optional_user_id),
     use_case: GetReportUseCase = Depends(get_get_report_use_case),
 ) -> ReportResponse:
     try:

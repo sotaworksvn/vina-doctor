@@ -55,6 +55,7 @@ services:
       AI_ENGINE_URL: http://ai_engine:8000
       DATABASE_URL: postgresql+asyncpg://${POSTGRES_USER:-vina}:${POSTGRES_PASSWORD:-vina_secret}@postgres:5432/${POSTGRES_DB:-vina_doctor}
       AUDIO_STORAGE_PATH: /data/audio_uploads
+      DISABLE_AUTH: ${DISABLE_AUTH:-false}
     volumes:
       - audio_data:/data/audio_uploads
     depends_on:
@@ -70,6 +71,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_DISABLE_AUTH: "true"
     image: ${FRONTEND_IMAGE:-ghcr.io/sotaworksvn/vina-doctor/frontend:latest}
     environment:
       NEXT_PUBLIC_BACKEND_URL: http://localhost/api

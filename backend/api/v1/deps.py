@@ -1,8 +1,9 @@
 from __future__ import annotations
 
+from datetime import datetime
 from uuid import UUID
 
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
 from backend.application.services.consultation_orchestrator import (
@@ -29,6 +30,7 @@ from backend.application.use_cases.retry_consultation_use_case import (
     RetryConsultationUseCase,
 )
 from backend.core.config import get_settings
+from backend.core.feature_flags import is_auth_disabled
 from backend.core.security import (
     create_access_token,
     decode_access_token,
@@ -47,6 +49,9 @@ from backend.infrastructure.repositories.sqlalchemy_user_repository import (
     SqlAlchemyUserRepository,
 )
 from backend.infrastructure.storage.local_audio_storage import LocalAudioStorage
+from backend.domain.entities import User
+from backend.domain.errors import NotFoundError
+from backend.domain.repositories import UserRepository
 
 _bearer = HTTPBearer()
 
@@ -182,6 +187,8 @@ def get_get_report_use_case(
 # Auth guard
 # ---------------------------------------------------------------------------
 
+_DUMMY_USER_ID = UUID("00000000-0000-0000-0000-000000000001")
+
 
 def get_current_user_id(
     credentials: HTTPAuthorizationCredentials = Depends(_bearer),
@@ -200,3 +207,45 @@ def get_current_user_id(
             detail="Invalid or expired token.",
             headers={"WWW-Authenticate": "Bearer"},
         )
+
+
+def get_optional_user_id(
+    request: Request,
+    user_repo: UserRepository = Depends(get_user_repo),
+    credentials: HTTPAuthorizationCredentials = Depends(HTTPBearer(auto_error=False)),
+) -> UUID:
+    """Auth guard that respects the DISABLE_AUTH feature flag.
+
+    When DISABLE_AUTH=true, reads the X-Anonymous-UID header (sent by the
+    frontend) and returns it as the user UUID. Each browser gets a persistent
+    anonymous identity stored in localStorage, so users see their own data
+    across sessions. If the anonymous user does not yet exist in the database,
+    it is auto-created.
+    """
+    if is_auth_disabled():
+        anon_uid = request.headers.get("X-Anonymous-UID")
+        if anon_uid:
+            user_id = UUID(anon_uid)
+            try:
+                user_repo.get_by_id(user_id)
+            except NotFoundError:
+                anon_user = User(
+                    id=user_id,
+                    email=f"anon_{user_id}@vina-doctor.local",
+                    hashed_password="",
+                    full_name="Anonymous User",
+                    specialty="",
+                    license_number="",
+                    phone="",
+                    created_at=datetime.utcnow(),
+                )
+                user_repo.save(anon_user)
+            return user_id
+        return _DUMMY_USER_ID
+    if credentials is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Not authenticated.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return get_current_user_id(credentials)

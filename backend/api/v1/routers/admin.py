@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel, field_validator
 
-from backend.api.v1.deps import get_ai_engine_client, get_current_user_id
+from backend.api.v1.deps import get_ai_engine_client, get_optional_user_id
 from backend.infrastructure.clients.ai_engine_protocol import (
     AiEngineClientProtocol,
     AiEngineConfigData,
@@ -78,7 +78,7 @@ class ConfigResponse(BaseModel):
 )
 async def update_dashscope_api_key(
     body: UpdateDashscopeApiKeyRequest,
-    _user_id: str = Depends(get_current_user_id),
+    _user_id: str = Depends(get_optional_user_id),
     ai_engine: AiEngineClientProtocol = Depends(get_ai_engine_client),
 ) -> None:
     try:
@@ -102,7 +102,7 @@ async def update_dashscope_api_key(
 )
 async def update_dashscope_url(
     body: UpdateDashscopeUrlRequest,
-    _user_id: str = Depends(get_current_user_id),
+    _user_id: str = Depends(get_optional_user_id),
     ai_engine: AiEngineClientProtocol = Depends(get_ai_engine_client),
 ) -> None:
     try:
@@ -126,7 +126,7 @@ async def update_dashscope_url(
 )
 async def update_model(
     body: UpdateModelRequest,
-    _user_id: str = Depends(get_current_user_id),
+    _user_id: str = Depends(get_optional_user_id),
     ai_engine: AiEngineClientProtocol = Depends(get_ai_engine_client),
 ) -> None:
     try:
@@ -150,7 +150,7 @@ async def update_model(
 )
 async def update_icd10_enrich(
     body: UpdateIcd10EnrichRequest,
-    _user_id: str = Depends(get_current_user_id),
+    _user_id: str = Depends(get_optional_user_id),
     ai_engine: AiEngineClientProtocol = Depends(get_ai_engine_client),
 ) -> None:
     try:
@@ -172,7 +172,7 @@ async def update_icd10_enrich(
     ),
 )
 async def get_config(
-    _user_id: str = Depends(get_current_user_id),
+    _user_id: str = Depends(get_optional_user_id),
     ai_engine: AiEngineClientProtocol = Depends(get_ai_engine_client),
 ) -> ConfigResponse:
     try:

@@ -7,10 +7,10 @@ from fastapi.responses import Response
 
 from backend.api.v1.deps import (
     get_create_consultation_use_case,
-    get_current_user_id,
     get_get_consultation_audio_use_case,
     get_get_consultation_use_case,
     get_list_consultations_use_case,
+    get_optional_user_id,
     get_retry_consultation_use_case,
 )
 from backend.api.v1.schemas.consultation import (
@@ -57,7 +57,7 @@ def _to_response(c: Consultation) -> ConsultationResponse:
 async def create_consultation(
     file: UploadFile,
     model: str | None = Query(default=None),
-    doctor_id: UUID = Depends(get_current_user_id),
+    doctor_id: UUID = Depends(get_optional_user_id),
     use_case: CreateConsultationUseCase = Depends(get_create_consultation_use_case),
 ) -> ConsultationResponse:
     audio_bytes = await file.read()
@@ -78,7 +78,7 @@ async def create_consultation(
 async def list_consultations(
     offset: int = Query(default=0, ge=0),
     limit: int = Query(default=20, ge=1, le=100),
-    doctor_id: UUID = Depends(get_current_user_id),
+    doctor_id: UUID = Depends(get_optional_user_id),
     use_case: ListConsultationsUseCase = Depends(get_list_consultations_use_case),
 ) -> ConsultationListResponse:
     items = await use_case.execute(doctor_id=doctor_id, offset=offset, limit=limit)
@@ -96,7 +96,7 @@ async def list_consultations(
 )
 async def retry_consultation(
     consultation_id: UUID,
-    doctor_id: UUID = Depends(get_current_user_id),
+    doctor_id: UUID = Depends(get_optional_user_id),
     use_case: RetryConsultationUseCase = Depends(get_retry_consultation_use_case),
 ) -> ConsultationResponse:
     try:
@@ -125,7 +125,7 @@ async def retry_consultation(
 )
 async def get_consultation_audio(
     consultation_id: UUID,
-    doctor_id: UUID = Depends(get_current_user_id),
+    doctor_id: UUID = Depends(get_optional_user_id),
     use_case: GetConsultationAudioUseCase = Depends(
         get_get_consultation_audio_use_case
     ),
@@ -159,7 +159,7 @@ async def get_consultation_audio(
 )
 async def get_consultation(
     consultation_id: UUID,
-    doctor_id: UUID = Depends(get_current_user_id),
+    doctor_id: UUID = Depends(get_optional_user_id),
     use_case: GetConsultationUseCase = Depends(get_get_consultation_use_case),
 ) -> ConsultationResponse:
     try:

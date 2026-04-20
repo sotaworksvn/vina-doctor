@@ -1,4 +1,6 @@
 # ── Stage 1: Builder ────────────────────────────────────────────────────────
+# NEXT_PUBLIC_DISABLE_AUTH is passed as a build ARG from docker-compose.yml / CI
+# and baked into the bundle at build time.
 FROM node:20-alpine AS builder
 
 # Enable corepack so pnpm is available without a separate install
@@ -19,8 +21,10 @@ COPY . .
 # knows where to reach the backend and AI engine via nginx.
 ARG NEXT_PUBLIC_BACKEND_URL=http://localhost:8001
 ARG NEXT_PUBLIC_AI_ENGINE_URL=http://localhost:8000
+ARG NEXT_PUBLIC_DISABLE_AUTH=false
 ENV NEXT_PUBLIC_BACKEND_URL=$NEXT_PUBLIC_BACKEND_URL
 ENV NEXT_PUBLIC_AI_ENGINE_URL=$NEXT_PUBLIC_AI_ENGINE_URL
+ENV NEXT_PUBLIC_DISABLE_AUTH=$NEXT_PUBLIC_DISABLE_AUTH
 
 RUN pnpm run build
 

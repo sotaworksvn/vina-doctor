@@ -14,9 +14,12 @@ class Settings(BaseSettings):
     ai_engine_timeout: float = 120.0
 
     # Auth
-    secret_key: str
+    secret_key: str = "dev-secret-not-used-when-auth-disabled"
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 60 * 24  # 24 hours
+
+    # Feature flags
+    disable_auth: bool = False  # Set DISABLE_AUTH=true to bypass login/logout
 
     # Storage
     audio_storage_path: str = "./audio_uploads"
